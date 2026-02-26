@@ -1,0 +1,355 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  urlcolor=blue,
+  citecolor=blue
+}
+
+\setlist[enumerate]{itemsep=0.25em,topsep=0.25em}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+
+\theoremstyle{definition}
+\newtheorem{exercise}{Exercise}[section]
+\newenvironment{solution}{\begin{proof}[Solution]}{\end{proof}}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+
+\DeclareMathOperator{\Area}{Area}
+\DeclareMathOperator{\Vol}{Vol}
+
+\newcommand{\HKUSTCrest}{\detokenize{../Week 2/hkust-crest.png}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{18.1pt}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\IfFileExists{\HKUSTCrest}{\includegraphics[height=14pt]{\HKUSTCrest}}{}}
+\fancyhead[C]{MATH1014 Calculus II Tutorial}
+\fancyhead[R]{Week 4}
+\fancyfoot[C]{\thepage\ /\ \pageref{LastPage}}
+
+\title{\vspace{-1.0em}MATH1014 Calculus II Tutorial\\Week 4}
+\author{Wenkai Fan}
+\date{}
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+\section{Review}
+
+\subsection{Arc Length}
+\begin{enumerate}
+  \item If $y=y(x)$ on $[a,b]$, then
+  \[
+  L=\int_a^b \sqrt{1+\left(\frac{dy}{dx}\right)^2}\,dx.
+  \]
+  \item If $x=x(y)$ on $[c,d]$, then
+  \[
+  L=\int_c^d \sqrt{1+\left(\frac{dx}{dy}\right)^2}\,dy.
+  \]
+  \item Typical simplifications: use identities like $1+\tan^2 x=\sec^2 x$, and look for perfect squares under the square root.
+\end{enumerate}
+
+\subsection{Area of Surface Revolution}
+\begin{enumerate}
+  \item Rotating the curve $y=f(x)\ge 0$ about the $x$-axis:
+  \[
+  \Area=2\pi\int_a^b y\,ds,\qquad ds=\sqrt{1+\left(\frac{dy}{dx}\right)^2}\,dx.
+  \]
+  \item Rotating the curve $x=g(y)\ge 0$ about the $y$-axis:
+  \[
+  \Area=2\pi\int_c^d x\,ds,\qquad ds=\sqrt{1+\left(\frac{dx}{dy}\right)^2}\,dy.
+  \]
+  \item Always write $ds$ first, then simplify the integrand before choosing a substitution.
+\end{enumerate}
+
+\subsection{Work}
+\begin{enumerate}
+  \item Core template:
+  \[
+  W=\int (\text{force})\cdot(\text{distance})=\int (\text{weight of slice})\cdot(\text{lifting distance}).
+  \]
+  \item For fluids: weight $=\rho g\cdot(\text{volume})$ where $\rho$ is density and $g$ is gravitational acceleration.
+  \item A good habit: define the coordinate, write the slice volume, then multiply by the distance to be lifted.
+\end{enumerate}
+
+\section{Exercises}
+
+\begin{exercise}[Arc length]
+Evaluate the following arc lengths.
+\begin{enumerate}
+  \item $y=\ln(\cos x)$, \ $0\le x\le a\le\frac{\pi}{2}$.
+  \item $x=\frac{y^2}{4}-\frac{\ln y}{2}$, \ $1\le y\le e$.
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+\textbf{(1)}\,
+$y'=\frac{d}{dx}\ln(\cos x)=-\tan x$. Hence
+\[
+L=\int_{0}^{a}\sqrt{1+\tan^{2}x}\,dx=\int_{0}^{a}\sec x\,dx.
+\]
+Use the standard antiderivative $\int \sec x\,dx=\ln|\sec x+\tan x|+C$ (see Remark~\ref{rem:int-sec}):
+\[
+L=\ln(\sec a+\tan a)-\ln(\sec 0+\tan 0)=\ln(\sec a+\tan a).
+\]
+
+\textbf{(2)}\,
+Treat $x$ as a function of $y$. Then
+\[
+\frac{dx}{dy}=\frac{y}{2}-\frac{1}{2y}=\frac{1}{2}\left(y-\frac{1}{y}\right).
+\]
+So
+\begin{align*}
+L
+&=\int_{1}^{e}\sqrt{1+\left(\frac{dx}{dy}\right)^{2}}\,dy
+=\int_{1}^{e}\sqrt{1+\frac{1}{4}\left(y-\frac{1}{y}\right)^{2}}\,dy \\
+&=\int_{1}^{e}\sqrt{\frac{1}{4}y^{2}+\frac{1}{2}+\frac{1}{4y^{2}}}\,dy
+=\int_{1}^{e}\left(\frac{y}{2}+\frac{1}{2y}\right)dy
+=\left.\left(\frac{y^{2}}{4}+\frac{1}{2}\ln y\right)\right|_{1}^{e}
+=\frac{e^{2}+1}{4}.
+\end{align*}
+\end{solution}
+
+\begin{exercise}[Area of surface revolution]
+Evaluate the following areas of surface revolution (around the $x$-axis).
+\begin{enumerate}
+  \item Rotate $y=\sin x$, \ $0\le x\le \pi$.
+  \item Rotate the ellipse $\frac{x^2}{a^2}+\frac{y^2}{b^2}=1$.
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+\textbf{(1)}\,
+We use $\Area=2\pi\int_0^\pi y\,ds$ with $y=\sin x$ and
+\[
+ds=\sqrt{1+(y')^2}\,dx=\sqrt{1+\cos^2 x}\,dx.
+\]
+Therefore
+\[
+\Area=2\pi\int_{0}^{\pi}\sin x\sqrt{1+\cos^2 x}\,dx.
+\]
+Let $t=\cos x$, so $dt=-\sin x\,dx$. Then
+\[
+\Area=2\pi\int_{-1}^{1}\sqrt{1+t^2}\,dt.
+\]
+Use (see Remark~\ref{rem:int-sqrt}):
+\[
+\int \sqrt{1+t^2}\,dt=\frac{1}{2}\left(t\sqrt{1+t^2}+\ln\left|t+\sqrt{1+t^2}\right|\right)+C.
+\]
+Evaluating from $-1$ to $1$ gives
+\[
+\int_{-1}^{1}\sqrt{1+t^2}\,dt=\sqrt{2}+\ln(1+\sqrt{2}),
+\]
+so
+\[
+\Area=2\sqrt{2}\pi+2\pi\ln(1+\sqrt{2}).
+\]
+
+\textbf{(2)}\,
+Write the upper half of the ellipse as $y=\frac{b}{a}\sqrt{a^2-x^2}$ for $-a\le x\le a$.
+The surface is symmetric, so
+\[
+\Area=2\pi\int_{-a}^{a} y\sqrt{1+(y')^2}\,dx
+=4\pi\int_{0}^{a} y\sqrt{1+(y')^2}\,dx.
+\]
+Compute
+\[
+y'=\frac{b}{a}\cdot\frac{-x}{\sqrt{a^2-x^2}},
+\qquad
+y\sqrt{1+(y')^2}
+=\frac{b}{a^2}\sqrt{a^4-(a^2-b^2)x^2}.
+\]
+Hence
+\[
+\Area=\frac{4\pi b}{a^2}\int_{0}^{a}\sqrt{a^4-(a^2-b^2)x^2}\,dx.
+\]
+This integral has different convenient closed forms depending on whether $a<b$, $a=b$, or $a>b$ (see Remark~\ref{rem:ellipse-area}).
+The final result is
+\[
+\Area=\begin{cases}
+2\pi b^2+\dfrac{2\pi a^2b}{\sqrt{b^2-a^2}}\ln\dfrac{b+\sqrt{b^2-a^2}}{a}, & a<b,\\[0.9em]
+4\pi ab, & a=b,\\[0.9em]
+2\pi b^2+\dfrac{2\pi a^2b}{\sqrt{a^2-b^2}}\arcsin\dfrac{\sqrt{a^2-b^2}}{a}, & a>b.
+\end{cases}
+\]
+\end{solution}
+
+\begin{exercise}[Work: pumping water]
+A water trough has a semicircular cross section with radius $0.5$ meters and length $2$ meters.
+How much work is required to pump the water out of the trough when it is full?
+\end{exercise}
+
+\begin{solution}
+Let $y$ be the height (in meters) above the bottom of the trough. Then $0\le y\le 0.5$ and the top rim is at $y=0.5$.
+The cross section is a semicircle of radius $0.5$ with center at height $0.5$, so at height $y$ the half-width is
+\[
+\sqrt{0.5^2-(0.5-y)^2}.
+\]
+Hence the width is $2\sqrt{0.5^2-(0.5-y)^2}=2\sqrt{y-y^2}$.
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[scale=6,>=Latex]
+    \draw[->] (-0.7,0) -- (0.7,0) node[below] {$x$};
+    \draw[->] (0,-0.05) -- (0,0.62) node[left] {$y$};
+    \draw[thick] (-0.5,0.5) arc (180:360:0.5);
+    \draw[thick] (-0.5,0.5) -- (0.5,0.5);
+    \draw[dashed] (0,0.5) -- (0,0);
+    \node[right] at (0.52,0.5) {$y=0.5$};
+    \node[left] at (-0.52,0.0) {$y=0$};
+  \end{tikzpicture}
+  \caption*{Cross section (semicircle of radius $0.5$).}
+\end{figure}
+
+Consider a thin horizontal slice at height $y$ with thickness $dy$.
+Its volume is
+\[
+dV=(\text{width})\cdot(\text{length})\cdot dy=\bigl(2\sqrt{y-y^2}\bigr)\cdot 2\,dy=4\sqrt{y-y^2}\,dy.
+\]
+With water density $\rho=1000\,\text{kg/m}^3$ and $g=9.8\,\text{m/s}^2$, the weight is
+\[
+dF=\rho g\,dV=1000\cdot 9.8\cdot 4\sqrt{y-y^2}\,dy.
+\]
+This slice must be lifted a distance $0.5-y$ to reach the rim. Therefore
+\[
+dW=dF\,(0.5-y)=4000g\sqrt{y-y^2}(0.5-y)\,dy.
+\]
+So the total work is
+\begin{align*}
+W
+&=\int_{0}^{0.5}4000g\sqrt{y-y^2}(0.5-y)\,dy.
+\end{align*}
+Let $u=0.5-y$, so $y=0.5-u$, $dy=-du$, and $\sqrt{y-y^2}=\sqrt{0.25-u^2}$. Then
+\begin{align*}
+W
+&=4000g\int_{0}^{0.5}u\sqrt{0.25-u^2}\,du.
+\end{align*}
+Let $t=0.25-u^2$ so $dt=-2u\,du$. Then
+\[
+W=2000g\int_{0}^{0.25}\sqrt{t}\,dt=2000g\cdot\frac{2}{3}t^{3/2}\Big|_{0}^{0.25}
+=2000g\cdot\frac{2}{3}\left(\frac{1}{4}\right)^{3/2}
+=\frac{4900}{3}\ \text{J}.
+\]
+\end{solution}
+
+\section{Remarks}
+\label{sec:remarks}
+
+\begin{remark}[Computing $\int \sec x\,dx$]
+\label{rem:int-sec}
+Start from $\sec x=\frac{1}{\cos x}$ and write
+\[
+\int \sec x\,dx=\int \frac{1}{\cos x}\,dx=\int \frac{\cos x}{\cos^2 x}\,dx.
+\]
+Let $t=\sin x$, so $dt=\cos x\,dx$ and $\cos^2 x=1-\sin^2 x=1-t^2$. Then
+\[
+\int \sec x\,dx=\int \frac{dt}{1-t^2}
+=\frac{1}{2}\int\left(\frac{1}{1-t}+\frac{1}{1+t}\right)dt
+=\frac{1}{2}\ln\left|\frac{1+t}{1-t}\right|+C.
+\]
+Substitute $t=\sin x$:
+\[
+\int \sec x\,dx=\frac{1}{2}\ln\left|\frac{1+\sin x}{1-\sin x}\right|+C
+=\ln\left|\frac{1+\sin x}{\cos x}\right|+C
+=\ln|\sec x+\tan x|+C.
+\]
+\end{remark}
+
+\begin{remark}[Computing $\int \sqrt{1+t^2}\,dt$]
+\label{rem:int-sqrt}
+Let
+\[
+I=\int \sqrt{1+t^2}\,dt.
+\]
+Integrate by parts with $u=\sqrt{1+t^2}$, $dv=dt$. Then $du=\frac{t}{\sqrt{1+t^2}}dt$ and $v=t$, so
+\[
+I=t\sqrt{1+t^2}-\int t\cdot \frac{t}{\sqrt{1+t^2}}\,dt
+=t\sqrt{1+t^2}-\int \frac{t^2}{\sqrt{1+t^2}}\,dt.
+\]
+Rewrite $t^2=(1+t^2)-1$:
+\[
+I=t\sqrt{1+t^2}-\int \sqrt{1+t^2}\,dt+\int \frac{1}{\sqrt{1+t^2}}\,dt.
+\]
+Move the middle term to the left:
+\[
+2I=t\sqrt{1+t^2}+\int \frac{1}{\sqrt{1+t^2}}\,dt.
+\]
+Note that
+\[
+\left[\ln\left|t+\sqrt{1+t^2}\right|\right]'=\frac{1}{\sqrt{1+t^2}},
+\]
+so
+\[
+I=\frac{1}{2}\left(t\sqrt{1+t^2}+\ln\left|t+\sqrt{1+t^2}\right|\right)+C.
+\]
+\end{remark}
+
+\begin{remark}[Deriving the piecewise formula in Exercise 2.2(2)]
+\label{rem:ellipse-area}
+From Exercise 2.2(2),
+\[
+\Area=\frac{4\pi b}{a^2}\,J,
+\qquad
+J=\int_{0}^{a}\sqrt{a^4-(a^2-b^2)x^2}\,dx.
+\]
+
+\textbf{Case 1: $a=b$.} Then $J=\int_0^a a^2\,dx=a^3$, so $\Area=4\pi ab$.
+
+\textbf{Case 2: $a<b$.} Let $k=\sqrt{b^2-a^2}>0$. Then $a^4-(a^2-b^2)x^2=a^4+k^2x^2$ and with $x=\frac{a^2}{k}t$,
+\[
+J=\frac{a^4}{k}\int_{0}^{k/a}\sqrt{1+t^2}\,dt.
+\]
+Using Remark~\ref{rem:int-sqrt} and $\sqrt{1+(k/a)^2}=\frac{b}{a}$,
+\[
+\int_{0}^{k/a}\sqrt{1+t^2}\,dt
+=\frac{1}{2}\left(\frac{k}{a}\cdot\frac{b}{a}+\ln\left(\frac{k}{a}+\frac{b}{a}\right)\right)
+=\frac{1}{2}\left(\frac{kb}{a^2}+\ln\left(\frac{b+k}{a}\right)\right).
+\]
+Hence
+\[
+J=\frac{a^2b}{2}+\frac{a^4}{2k}\ln\left(\frac{b+k}{a}\right),
+\qquad
+\Area=2\pi b^2+\frac{2\pi a^2b}{\sqrt{b^2-a^2}}\ln\left(\frac{b+\sqrt{b^2-a^2}}{a}\right).
+\]
+
+\textbf{Case 3: $a>b$.} Let $k=\sqrt{a^2-b^2}>0$. Then $a^4-(a^2-b^2)x^2=a^4-k^2x^2$ and with $x=\frac{a^2}{k}t$,
+\[
+J=\frac{a^4}{k}\int_{0}^{k/a}\sqrt{1-t^2}\,dt.
+\]
+Let $t=\sin\theta$. Then $dt=\cos\theta\,d\theta$ and
+\[
+\int_{0}^{k/a}\sqrt{1-t^2}\,dt=\int_{0}^{\arcsin(k/a)}\cos^2\theta\,d\theta
+=\frac{1}{2}\left(\theta+\sin\theta\cos\theta\right)\Big|_{0}^{\arcsin(k/a)}.
+\]
+At $\theta=\arcsin(k/a)$, $\sin\theta=\frac{k}{a}$ and $\cos\theta=\frac{b}{a}$, so
+\[
+\int_{0}^{k/a}\sqrt{1-t^2}\,dt=\frac{1}{2}\left(\arcsin\left(\frac{k}{a}\right)+\frac{kb}{a^2}\right).
+\]
+Thus
+\[
+J=\frac{a^2b}{2}+\frac{a^4}{2k}\arcsin\left(\frac{k}{a}\right),
+\qquad
+\Area=2\pi b^2+\frac{2\pi a^2b}{\sqrt{a^2-b^2}}\arcsin\left(\frac{\sqrt{a^2-b^2}}{a}\right).
+\]
+\end{remark}
+
+\end{document}
