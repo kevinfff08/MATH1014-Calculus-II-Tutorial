@@ -35,3 +35,6 @@ desktop.ini
 
 # past editions
 past_editions/
+
+# tools
+PROMPT_TEMPLATE.md

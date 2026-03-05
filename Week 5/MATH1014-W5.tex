@@ -1,0 +1,248 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  urlcolor=blue,
+  citecolor=blue
+}
+
+\setlist[enumerate]{itemsep=0.25em,topsep=0.25em}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+
+\theoremstyle{definition}
+\newtheorem{exercise}{Exercise}[section]
+\newenvironment{solution}{\begin{proof}[Solution]}{\end{proof}}
+
+\DeclareMathOperator{\Area}{Area}
+\DeclareMathOperator{\Vol}{Vol}
+
+\newcommand{\HKUSTCrest}{\detokenize{../Week 2/hkust-crest.png}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{18.1pt}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\IfFileExists{\HKUSTCrest}{\includegraphics[height=14pt]{\HKUSTCrest}}{}}
+\fancyhead[C]{MATH1014 Calculus II Tutorial}
+\fancyhead[R]{Week 5}
+\fancyfoot[C]{\thepage\ /\ \pageref{LastPage}}
+
+\title{\vspace{-1.0em}MATH1014 Calculus II Tutorial\\Week 5}
+\author{Wenkai Fan}
+\date{}
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+\section{Review}
+
+\subsection{Integration by Parts}
+\begin{enumerate}
+  \item Formula:
+  \[
+  \int u\,dv = uv-\int v\,du.
+  \]
+  \item A practical rule of thumb for choosing $u$: pick something that becomes simpler after differentiating (e.g.\ $\ln x$, $\arcsin x$, powers of $\ln x$).
+  \item If integration by parts produces the original integral again, treat it as an unknown and solve a linear equation for it (this happens often for $\sin(\ln x)$ and $\cos(\ln x)$ type integrals).
+\end{enumerate}
+
+\subsection{Trigonometric Integrals and Substitutions}
+\begin{enumerate}
+  \item Use the derivative cycle $\frac{d}{dx}(\sin x)=\cos x$ and $\frac{d}{dx}(\cos x)=-\sin x$. This lets you build a numerator as the derivative of a convenient denominator, e.g.\ $(\sin x+\cos x)'=\cos x-\sin x$.
+  \item Useful identities:
+  \[
+  \cos(\alpha-\beta)=\cos\alpha\cos\beta+\sin\alpha\sin\beta,
+  \qquad
+  \sin^2 x+\cos^2 x=1.
+  \]
+  \item Tangent half-angle substitution $u=\tan\frac{x}{2}$:
+  \[
+  \sin x=\frac{2u}{1+u^2},\quad
+  \cos x=\frac{1-u^2}{1+u^2},\quad
+  dx=\frac{2}{1+u^2}\,du.
+  \]
+\end{enumerate}
+
+\section{Exercises}
+
+\subsection{Integration by Parts}
+
+\begin{exercise}[Q1]
+Evaluate $\displaystyle \int \frac{\arcsin x}{\sqrt{1-x}}\,dx$.
+\end{exercise}
+
+\begin{solution}
+\textbf{Key idea.} Write the integral in a form suitable for integration by parts using $d(\sqrt{1-x})$.
+Since $d(\sqrt{1-x})=-\frac{1}{2\sqrt{1-x}}\,dx$, we have
+\[
+\int \frac{\arcsin x}{\sqrt{1-x}}\,dx=-2\int \arcsin x\,d(\sqrt{1-x}).
+\]
+Integration by parts gives
+\begin{align*}
+-2\int \arcsin x\,d(\sqrt{1-x})
+&=-2\sqrt{1-x}\,\arcsin x+2\int \sqrt{1-x}\cdot \frac{d}{dx}(\arcsin x)\,dx \\
+&=-2\sqrt{1-x}\,\arcsin x+2\int \frac{\sqrt{1-x}}{\sqrt{1-x^2}}\,dx.
+\end{align*}
+Since $\sqrt{1-x^2}=\sqrt{(1-x)(1+x)}$, the remaining integrand simplifies to $\frac{1}{\sqrt{1+x}}$:
+\[
+2\int \frac{\sqrt{1-x}}{\sqrt{(1-x)(1+x)}}\,dx
+=2\int \frac{1}{\sqrt{1+x}}\,dx
+=4\sqrt{1+x}+C.
+\]
+Therefore,
+\[
+\int \frac{\arcsin x}{\sqrt{1-x}}\,dx=-2\sqrt{1-x}\,\arcsin x+4\sqrt{1+x}+C.
+\]
+\end{solution}
+
+\begin{exercise}[Q2]
+Evaluate $\displaystyle \int x^2\ln x\,dx$.
+\end{exercise}
+
+\begin{solution}
+Use integration by parts with $u=\ln x$ and $dv=x^2\,dx$. Then $du=\frac{1}{x}dx$ and $v=\frac{x^3}{3}$.
+Hence
+\[
+\int x^2\ln x\,dx=\frac{x^3}{3}\ln x-\int \frac{x^3}{3}\cdot \frac{1}{x}\,dx
+=\frac{x^3}{3}\ln x-\frac{1}{3}\int x^2\,dx
+=\frac{x^3}{3}\ln x-\frac{x^3}{9}+C.
+\]
+\end{solution}
+
+\begin{exercise}[Q3]
+Evaluate $\displaystyle \int \ln^2 x\,dx$.
+\end{exercise}
+
+\begin{solution}
+Use integration by parts with $u=\ln^2 x$ and $dv=dx$. Then $du=\frac{2\ln x}{x}dx$ and $v=x$.
+So
+\[
+\int \ln^2 x\,dx=x\ln^2 x-2\int \ln x\,dx.
+\]
+Apply integration by parts again for $\int \ln x\,dx$ with $u=\ln x$, $dv=dx$:
+\[
+\int \ln x\,dx=x\ln x-\int 1\,dx=x\ln x-x+C.
+\]
+Substitute back:
+\[
+\int \ln^2 x\,dx=x\ln^2 x-2(x\ln x-x)+C
+=x\ln^2 x-2x\ln x+2x+C.
+\]
+\end{solution}
+
+\begin{exercise}[Q4]
+Evaluate $\displaystyle \int \cos(\ln x)\,dx$.
+\end{exercise}
+
+\begin{solution}
+Let
+\[
+I=\int \cos(\ln x)\,dx,\qquad J=\int \sin(\ln x)\,dx.
+\]
+Integration by parts for $I$ with $u=\cos(\ln x)$, $dv=dx$ gives $du=-\frac{\sin(\ln x)}{x}dx$ and $v=x$, so
+\[
+I=x\cos(\ln x)+\int \sin(\ln x)\,dx=x\cos(\ln x)+J.
+\]
+Similarly for $J$ with $u=\sin(\ln x)$, $dv=dx$ gives $du=\frac{\cos(\ln x)}{x}dx$ and $v=x$, hence
+\[
+J=x\sin(\ln x)-\int \cos(\ln x)\,dx=x\sin(\ln x)-I.
+\]
+Substitute this into $I=x\cos(\ln x)+J$:
+\[
+I=x\cos(\ln x)+x\sin(\ln x)-I
+\quad\Rightarrow\quad
+2I=x\bigl(\cos(\ln x)+\sin(\ln x)\bigr).
+\]
+Therefore
+\[
+\int \cos(\ln x)\,dx=\frac{x}{2}\bigl(\cos(\ln x)+\sin(\ln x)\bigr)+C.
+\]
+\end{solution}
+
+\subsection{Trigonometric Integrals and Substitutions}
+
+\begin{exercise}[Q5]
+Evaluate $\displaystyle \int \frac{\cos x}{\sin x+\cos x}\,dx$.
+\end{exercise}
+
+\begin{solution}
+Rewrite the numerator:
+\[
+\cos x=\frac{1}{2}\bigl(\sin x+\cos x\bigr)+\frac{1}{2}\bigl(\cos x-\sin x\bigr).
+\]
+Hence
+\begin{align*}
+\int \frac{\cos x}{\sin x+\cos x}\,dx
+&=\frac{1}{2}\int 1\,dx+\frac{1}{2}\int \frac{\cos x-\sin x}{\sin x+\cos x}\,dx \\
+&=\frac{x}{2}+\frac{1}{2}\ln|\sin x+\cos x|+C.
+\end{align*}
+\end{solution}
+
+\begin{exercise}[Q6]
+Evaluate $\displaystyle \int \frac{1}{\sin(x+a)\cos(x+b)}\,dx$.
+\end{exercise}
+
+\begin{solution}
+Use $\cos(a-b)=\cos(x+a)\cos(x+b)+\sin(x+a)\sin(x+b)$:
+\begin{align*}
+\int \frac{1}{\sin(x+a)\cos(x+b)}\,dx
+&=\frac{1}{\cos(a-b)}\int \frac{\cos(a-b)}{\sin(x+a)\cos(x+b)}\,dx \\
+&=\frac{1}{\cos(a-b)}\int\left(\frac{\cos(x+a)}{\sin(x+a)}+\frac{\sin(x+b)}{\cos(x+b)}\right)dx \\
+&=\frac{1}{\cos(a-b)}\left(\ln|\sin(x+a)|-\ln|\cos(x+b)|\right)+C \\
+&=\frac{1}{\cos(a-b)}\ln\left|\frac{\sin(x+a)}{\cos(x+b)}\right|+C.
+\end{align*}
+\end{solution}
+
+\begin{exercise}[Q7]
+Evaluate $\displaystyle \int \frac{1}{(2+\cos x)\sin x}\,dx$.
+\end{exercise}
+
+\begin{solution}
+Let $u=\cos x$, so $du=-\sin x\,dx$. Then
+\[
+\int \frac{1}{(2+\cos x)\sin x}\,dx
+=-\int \frac{1}{(2+u)(1-u^2)}\,du.
+\]
+Decompose the rational function into partial fractions (in $u$). A convenient simplified final form is
+\[
+\int \frac{1}{(2+\cos x)\sin x}\,dx
+=\frac{1}{6}\ln\left(\frac{(1-\cos x)(2+\cos x)^2}{(1+\cos x)^3}\right)+C.
+\]
+\end{solution}
+
+\begin{exercise}[Q8]
+Evaluate $\displaystyle \int \frac{1}{2\sin x-\cos x+5}\,dx$.
+\end{exercise}
+
+\begin{solution}
+Use the tangent half-angle substitution $u=\tan\frac{x}{2}$, so
+\[
+\sin x=\frac{2u}{1+u^2},\qquad \cos x=\frac{1-u^2}{1+u^2},\qquad dx=\frac{2}{1+u^2}\,du.
+\]
+Then
+\begin{align*}
+\int \frac{1}{2\sin x-\cos x+5}\,dx
+&=\int \frac{\frac{2}{1+u^2}}{\frac{4u}{1+u^2}-\frac{1-u^2}{1+u^2}+5}\,du
+=\int \frac{1}{3u^2+2u+2}\,du \\
+&=\frac{1}{3}\int \frac{1}{\left(u+\frac{1}{3}\right)^2+\frac{5}{9}}\,du
+=\frac{1}{\sqrt{5}}\arctan\left(\frac{3u+1}{\sqrt{5}}\right)+C \\
+&=\frac{1}{\sqrt{5}}\arctan\left(\frac{3\tan\frac{x}{2}+1}{\sqrt{5}}\right)+C.
+\end{align*}
+\end{solution}
+
+\end{document}
