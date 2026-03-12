@@ -1,0 +1,268 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,patterns}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  urlcolor=blue,
+  citecolor=blue
+}
+
+\setlist[enumerate]{itemsep=0.25em,topsep=0.25em}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+
+\theoremstyle{definition}
+\newtheorem{exercise}{Exercise}[section]
+\newenvironment{solution}{\begin{proof}[Solution]}{\end{proof}}
+
+\DeclareMathOperator{\Area}{Area}
+\DeclareMathOperator{\Vol}{Vol}
+
+\newcommand{\HKUSTCrest}{\detokenize{../Week 2/hkust-crest.png}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{18.1pt}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\IfFileExists{\HKUSTCrest}{\includegraphics[height=14pt]{\HKUSTCrest}}{}}
+\fancyhead[C]{MATH1014 Calculus II Tutorial}
+\fancyhead[R]{Week 6}
+\fancyfoot[C]{\thepage\ /\ \pageref{LastPage}}
+
+\title{\vspace{-1.0em}MATH1014 Calculus II Tutorial\\Week 6}
+\author{Wenkai Fan}
+\date{}
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+\section{Review}
+
+\subsection{Trigonometric Substitution and Trig Manipulations}
+\begin{enumerate}
+  \item Common substitutions:
+  \[
+  \sqrt{1+x^2}\ \Rightarrow\ x=\tan t,\ dx=\sec^2 t\,dt,\ \sqrt{1+x^2}=\sec t.
+  \]
+  \[
+  \sqrt{1-x^2}\ \Rightarrow\ x=\sin t,\ dx=\cos t\,dt,\ \sqrt{1-x^2}=\cos t.
+  \]
+  \item Useful identities and rewrites:
+  \[
+  \sin^2 x+\cos^2 x=1,
+  \qquad
+  \sin x+\cos x=\sqrt{2}\sin\!\left(x+\frac{\pi}{4}\right),
+  \qquad
+  1+\cos t=2\cos^2\frac{t}{2}.
+  \]
+  \item If you can create a $du$ (like $du=\sec^2 x\,dx$ for $u=\tan x$), the integral often becomes a rational function in $u$.
+\end{enumerate}
+
+\subsection{Partial Fraction Decomposition}
+\begin{enumerate}
+  \item Factor first (e.g.\ $x^3+1=(x+1)(x^2-x+1)$), then decompose into simpler fractions.
+  \item A quadratic like $(x-\tfrac12)^2+\tfrac34$ produces an $\arctan$ term after completing the square.
+\end{enumerate}
+
+\section{Exercises}
+
+\subsection{Trig Substitution and Trig Manipulations}
+
+\begin{exercise}
+Evaluate $\displaystyle \int \frac{\sin^2 x}{1+\sin^2 x}\,dx$.
+\end{exercise}
+
+\begin{solution}
+\begin{align*}
+\int\frac{\sin^2 x}{1+\sin^2 x}\,dx
+&=\int\frac{1+\sin^2 x-1}{1+\sin^2 x}\,dx
+=\int 1\,dx-\int\frac{1}{1+\sin^2 x}\,dx \\
+&=x-\int\frac{1}{2\sin^2 x+\cos^2 x}\,dx
+=x-\int\frac{\frac{1}{\cos^2 x}}{1+2\tan^2 x}\,dx \\
+&=x-\int\frac{d(\tan x)}{1+2\tan^2 x}
+=x-\frac{1}{\sqrt{2}}\arctan\!\bigl(\sqrt{2}\tan x\bigr)+C.
+\end{align*}
+\end{solution}
+
+\begin{exercise}
+Evaluate $\displaystyle \int \frac{\sin x\cos x}{\sin x+\cos x}\,dx$.
+\end{exercise}
+
+\begin{solution}
+Use $(\sin x+\cos x)^2=1+2\sin x\cos x$, hence
+\[
+\sin x\cos x=\frac{(\sin x+\cos x)^2-1}{2}.
+\]
+Therefore,
+\begin{align*}
+\int \frac{\sin x\cos x}{\sin x+\cos x}\,dx
+&=\frac{1}{2}\int\frac{(\sin x+\cos x)^2-1}{\sin x+\cos x}\,dx \\
+&=\frac{1}{2}\int(\sin x+\cos x)\,dx-\frac{1}{2}\int\frac{1}{\sin x+\cos x}\,dx.
+\end{align*}
+For the first integral, $\int(\sin x+\cos x)\,dx=\sin x-\cos x$.
+For the second integral, use $\sin x+\cos x=\sqrt{2}\sin(x+\frac{\pi}{4})$:
+\[
+\int\frac{1}{\sin x+\cos x}\,dx
+=\frac{1}{\sqrt{2}}\int \csc\!\left(x+\frac{\pi}{4}\right)\,dx.
+\]
+With $t=x+\frac{\pi}{4}$, we use the standard integral $\int \csc t\,dt=\ln\left|\tan\frac{t}{2}\right|+C$. One derivation is:
+\begin{align*}
+\int \csc t\,dt
+&=\int \frac{\sin t}{\sin^2 t}\,dt
+=-\int \frac{d(\cos t)}{1-\cos^2 t} \\
+&=-\frac{1}{2}\int\left(\frac{1}{1-\cos t}+\frac{1}{1+\cos t}\right)d(\cos t)
+=-\frac{1}{2}\ln\left|\frac{1+\cos t}{1-\cos t}\right|+C \\
+&=\ln\left|\tan\frac{t}{2}\right|+C.
+\end{align*}
+Therefore,
+\[
+\int\frac{1}{\sin x+\cos x}\,dx
+=\frac{1}{\sqrt{2}}\ln\left|\tan\left(\frac{x}{2}+\frac{\pi}{8}\right)\right|+C.
+\]
+Hence,
+\[
+\int \frac{\sin x\cos x}{\sin x+\cos x}\,dx
+=\frac{1}{2}(\sin x-\cos x)-\frac{1}{2\sqrt{2}}\ln\left|\tan\left(\frac{x}{2}+\frac{\pi}{8}\right)\right|+C.
+\]
+\end{solution}
+
+\begin{exercise}
+Evaluate $\displaystyle \int \frac{dx}{x^4\sqrt{1+x^2}}$.
+\end{exercise}
+
+\begin{solution}
+Let $x=\tan t$, so $dx=\sec^2 t\,dt$ and $\sqrt{1+x^2}=\sec t$. Then
+\begin{align*}
+\int\frac{dx}{x^4\sqrt{1+x^2}}
+&=\int\frac{\sec^2 t\,dt}{\tan^4 t\sec t}
+=\int\frac{\cos^3 t}{\sin^4 t}\,dt \\
+&=\int\frac{\cos^2 t\cdot\cos t}{\sin^4 t}\,dt
+=\int\frac{(1-\sin^2 t)\,d(\sin t)}{\sin^4 t} \\
+&=\int\left(\frac{1}{\sin^4 t}-\frac{1}{\sin^2 t}\right)d(\sin t)
+=-\frac{1}{3\sin^3 t}+\frac{1}{\sin t}+C.
+\end{align*}
+Since $\tan t=x$, we have $\sin t=\dfrac{x}{\sqrt{1+x^2}}$. Substitute back and simplify:
+\[
+-\frac{1}{3}\left(\frac{\sqrt{1+x^2}}{x}\right)^3+\left(\frac{\sqrt{1+x^2}}{x}\right)
+=\frac{2x^2-1}{3x^3}\sqrt{1+x^2}+C.
+\]
+\end{solution}
+
+\begin{exercise}
+Evaluate $\displaystyle \int \frac{dx}{1+\sqrt{1-x^2}}$.
+\end{exercise}
+
+\begin{solution}
+Let $x=\sin t$ with $t\in\left[-\frac{\pi}{2},\frac{\pi}{2}\right]$. Then $dx=\cos t\,dt$ and $\sqrt{1-x^2}=\cos t$, so
+\begin{align*}
+\int\frac{dx}{1+\sqrt{1-x^2}}
+&=\int\frac{\cos t}{1+\cos t}\,dt
+=\int\left(1-\frac{1}{1+\cos t}\right)dt \\
+&=t-\int\frac{1}{2\cos^2\frac{t}{2}}\,dt
+=t-\int \sec^2\frac{t}{2}\,d\!\left(\frac{t}{2}\right)
+=t-\tan\frac{t}{2}+C.
+\end{align*}
+Substitute $t=\arcsin x$:
+\[
+\int\frac{dx}{1+\sqrt{1-x^2}}=\arcsin x-\tan\left(\frac{1}{2}\arcsin x\right)+C.
+\]
+
+Another way (without trig substitution) is to rationalize:
+\[
+\int\frac{dx}{1+\sqrt{1-x^2}}
+=\int \frac{1-\sqrt{1-x^2}}{x^2}\,dx
+=\int \frac{1}{x^2}\,dx-\int \frac{\sqrt{1-x^2}}{x^2}\,dx.
+\]
+For the second integral, move one $x$ into $dx$ and one $x$ into the square root:
+\[
+\int \frac{\sqrt{1-x^2}}{x^2}\,dx=\int \frac{1}{x}\sqrt{\frac{1-x^2}{x^2}}\,dx=\int \frac{1}{x}\sqrt{\frac{1}{x^2}-1}\,dx.
+\]
+Let $u=\frac{1}{x}$. Then $\frac{1}{x}dx=-\frac{du}{u}$ and
+\[
+\int \frac{\sqrt{1-x^2}}{x^2}\,dx=-\int \frac{\sqrt{u^2-1}}{u}\,du.
+\]
+Now set $v=\sqrt{u^2-1}$, so $dv=\frac{u}{\sqrt{u^2-1}}\,du=\frac{u}{v}du$ and $du=\frac{v}{u}dv$. Then
+\[
+\frac{\sqrt{u^2-1}}{u}\,du=\frac{v}{u}\cdot\frac{v}{u}\,dv=\frac{v^2}{v^2+1}\,dv=1-\frac{1}{v^2+1}\,dv.
+\]
+Hence
+\[
+\int \frac{\sqrt{1-x^2}}{x^2}\,dx
+=-\int\left(1-\frac{1}{v^2+1}\right)dv
+=-v+\arctan v+C
+=-\sqrt{\frac{1}{x^2}-1}+\arctan\sqrt{\frac{1}{x^2}-1}+C.
+\]
+Therefore,
+\[
+\int\frac{dx}{1+\sqrt{1-x^2}}=-\frac{1}{x}+\sqrt{\frac{1}{x^2}-1}-\arctan\sqrt{\frac{1}{x^2}-1}+C.
+\]
+For $|x|<1$, write $x=\sin t$ so $\sqrt{\frac{1}{x^2}-1}=\cot t$ and $\arctan(\cot t)=\frac{\pi}{2}-t$, hence $-\arctan\sqrt{\frac{1}{x^2}-1}=t+C=\arcsin x+C$.
+Also $\sqrt{\frac{1}{x^2}-1}=\frac{\sqrt{1-x^2}}{|x|}$, so (up to a constant)
+\[
+\int\frac{dx}{1+\sqrt{1-x^2}}=-\frac{1}{x}+\frac{\sqrt{1-x^2}}{x}+\arcsin x+C
+=\frac{\sqrt{1-x^2}-1}{x}+\arcsin x+C.
+\]
+\end{solution}
+
+\subsection{Partial Fraction Decomposition}
+
+\begin{exercise}
+Evaluate $\displaystyle \int \frac{1}{x^2-x-2}\,dx$.
+\end{exercise}
+
+\begin{solution}
+Factor $x^2-x-2=(x-2)(x+1)$ and decompose:
+\[
+\frac{1}{(x-2)(x+1)}=\frac{A}{x-2}+\frac{B}{x+1}.
+\]
+Solving $1=A(x+1)+B(x-2)$ gives $A=\frac{1}{3}$ and $B=-\frac{1}{3}$, so
+\[
+\int \frac{1}{x^2-x-2}\,dx
+=\frac{1}{3}\int\left(\frac{1}{x-2}-\frac{1}{x+1}\right)dx
+=\frac{1}{3}\ln\left|\frac{x-2}{x+1}\right|+C.
+\]
+\end{solution}
+
+\begin{exercise}
+Evaluate $\displaystyle \int \frac{3}{x^3+1}\,dx$.
+\end{exercise}
+
+\begin{solution}
+Factor $x^3+1=(x+1)(x^2-x+1)$ and decompose:
+\[
+\frac{3}{x^3+1}=\frac{1}{x+1}-\frac{x-2}{x^2-x+1}.
+\]
+Then
+\[
+\int\frac{3}{x^3+1}\,dx=\ln|x+1|-\int\frac{x-2}{x^2-x+1}\,dx.
+\]
+Complete the square $x^2-x+1=\left(x-\frac{1}{2}\right)^2+\frac{3}{4}$ and split the numerator
+$x-2=\left(x-\frac{1}{2}\right)-\frac{3}{2}$. Hence
+\begin{align*}
+\int\frac{x-2}{x^2-x+1}\,dx
+&=\int\frac{x-\frac{1}{2}}{\left(x-\frac{1}{2}\right)^2+\frac{3}{4}}\,dx
+-\frac{3}{2}\int\frac{1}{\left(x-\frac{1}{2}\right)^2+\left(\frac{\sqrt{3}}{2}\right)^2}\,dx \\
+&=\frac{1}{2}\ln\left(x^2-x+1\right)-\sqrt{3}\arctan\left(\frac{2x-1}{\sqrt{3}}\right)+C.
+\end{align*}
+Therefore
+\[
+\int \frac{3}{x^3+1}\,dx=\ln|x+1|-\frac{1}{2}\ln\left(x^2-x+1\right)+\sqrt{3}\arctan\left(\frac{2x-1}{\sqrt{3}}\right)+C.
+\]
+\end{solution}
+
+\end{document}
