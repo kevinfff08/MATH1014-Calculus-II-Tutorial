@@ -1,0 +1,305 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{tikz}
+\usepackage{caption}
+\usetikzlibrary{arrows.meta,calc,patterns}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  urlcolor=blue,
+  citecolor=blue
+}
+
+\setlist[enumerate]{itemsep=0.25em,topsep=0.25em}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+
+\theoremstyle{definition}
+\newtheorem{exercise}{Exercise}[section]
+
+\newenvironment{solution}{\begin{proof}[Solution]}{\end{proof}}
+
+\DeclareMathOperator{\Area}{Area}
+\DeclareMathOperator{\Vol}{Vol}
+
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{18.1pt}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\IfFileExists{../Week 2/hkust-crest.png}{\includegraphics[height=14pt]{../Week 2/hkust-crest.png}}{}}
+\fancyhead[C]{MATH1014 Calculus II Tutorial}
+\fancyhead[R]{Week 7}
+\fancyfoot[C]{\thepage\ /\ \pageref{LastPage}}
+
+\title{\vspace{-1.0em}MATH1014 Calculus II Tutorial\\Week 7}
+\author{Wenkai Fan}
+\date{}
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+\section{Review}
+
+\subsection{Numerical Integration}
+When we cannot evaluate an integral analytically, we use numerical approximations. For an integral $\int_a^b f(x)\,dx$, divide the interval $[a,b]$ into $n$ subintervals of equal width $\Delta x = \frac{b-a}{n}$. Let $x_i = a + i\Delta x$ for $i=0,1,\dots,n$.
+\begin{enumerate}
+    \item \textbf{Left Endpoint Approximation ($L_n$)}: Uses the left endpoint of each subinterval.
+    \[
+    L_n = \Delta x [f(x_0) + f(x_1) + \dots + f(x_{n-1})]
+    \]
+    \item \textbf{Right Endpoint Approximation ($R_n$)}: Uses the right endpoint of each subinterval.
+    \[
+    R_n = \Delta x [f(x_1) + f(x_2) + \dots + f(x_n)]
+    \]
+    \item \textbf{Trapezoidal Rule ($T_n$)}: Averages $L_n$ and $R_n$, approximating the area with trapezoids.
+    \[
+    T_n = \frac{\Delta x}{2} [f(x_0) + 2f(x_1) + 2f(x_2) + \dots + 2f(x_{n-1}) + f(x_n)]
+    \]
+    \item \textbf{Simpson's Rule ($S_n$)}: Approximates the curve using parabolas ($n$ must be even).
+    \[
+    S_n = \frac{\Delta x}{3} [f(x_0) + 4f(x_1) + 2f(x_2) + 4f(x_3) + \dots + 2f(x_{n-2}) + 4f(x_{n-1}) + f(x_n)]
+    \]
+\end{enumerate}
+
+\subsection{Polar Coordinates}
+A point in the plane can be represented by polar coordinates $(r, \theta)$, where $r$ is the distance from the origin (pole) and $\theta$ is the angle measured counterclockwise from the positive $x$-axis (polar axis).
+\begin{itemize}
+    \item \textbf{Conversion to Cartesian}: $x = r\cos\theta$, $y = r\sin\theta$.
+    \item \textbf{Conversion to Polar}: $r^2 = x^2 + y^2$, $\tan\theta = \frac{y}{x}$.
+\end{itemize}
+
+\textbf{Area Enclosed by a Polar Curve} \\
+The area $A$ of the region bounded by a polar curve $r=f(\theta)$ and the rays $\theta=\alpha$ and $\theta=\beta$ is:
+\[
+A = \int_{\alpha}^{\beta} \frac{1}{2} [f(\theta)]^2 \,d\theta = \int_{\alpha}^{\beta} \frac{1}{2} r^2 \,d\theta
+\]
+\textit{Tip}: Exploit symmetry whenever possible to simplify the calculation. For example, if the curve is symmetric about the $x$-axis or $y$-axis, calculate the area in one quadrant and multiply by the appropriate factor.
+
+\textbf{Arc Length of a Polar Curve} \\
+The arc length $L$ of a polar curve $r=f(\theta)$ from $\theta=\alpha$ to $\theta=\beta$ is:
+\[
+L = \int_{\alpha}^{\beta} \sqrt{r^2 + \left(\frac{dr}{d\theta}\right)^2} \,d\theta
+\]
+
+\section{Exercises}
+
+\subsection{Numerical Integration}
+
+\begin{exercise}
+Use $L_4, R_4, T_4$, and $S_4$ to evaluate the following integral:
+\[
+\int_0^1\frac{dx}{1+x^2}=\frac{1}{4}\pi
+\]
+\end{exercise}
+
+\begin{solution}
+\textbf{Idea.} Identify $f(x) = \frac{1}{1+x^2}$, $a=0$, $b=1$, and $n=4$. First, calculate $\Delta x$ and the values of $x_i$ and $f(x_i)$.
+
+We have $\Delta x = \frac{1-0}{4} = \frac{1}{4}$. The partition points are $x_i = 0, \frac{1}{4}, \frac{1}{2}, \frac{3}{4}, 1$. Let's construct a table of values for $f(x_i)$:
+
+\begin{table}[H]
+	\centering
+\begin{tabular}{|c|c|c|c|c|c|}
+	\hline
+	$i$ & $0$ & $1$ & $2$ & $3$ & $4$\\
+	\hline
+	$x_i$ & $0$ & $\frac{1}{4}$ & $\frac{1}{2}$ & $\frac{3}{4}$ & $1$\\
+	\hline
+	$f(x_i)$ & $1$ & $\frac{16}{17}$ & $\frac{4}{5}$ &$\frac{16}{25}$ & $\frac{1}{2}$\\
+	\hline
+\end{tabular}
+\end{table}
+
+Now apply the formulas for each approximation method:
+
+\textbf{(1) Left Endpoint Approximation ($L_4$):}
+\begin{align*}
+L_4 &= \Delta x [f(x_0) + f(x_1) + f(x_2) + f(x_3)] \\
+&= \frac{1}{4} \left(1 + \frac{16}{17} + \frac{4}{5} + \frac{16}{25}\right) \\
+&= \frac{1437}{1700} \approx 0.8453
+\end{align*}
+
+\textbf{(2) Right Endpoint Approximation ($R_4$):}
+\begin{align*}
+R_4 &= \Delta x [f(x_1) + f(x_2) + f(x_3) + f(x_4)] \\
+&= \frac{1}{4} \left(\frac{16}{17} + \frac{4}{5} + \frac{16}{25} + \frac{1}{2}\right) \\
+&= \frac{2449}{3400} \approx 0.7203
+\end{align*}
+
+\textbf{(3) Trapezoidal Rule ($T_4$):}
+\begin{align*}
+T_4 &= \frac{\Delta x}{2} [f(x_0) + 2f(x_1) + 2f(x_2) + 2f(x_3) + f(x_4)] \\
+&= \frac{1}{8} \left(1 + 2\left(\frac{16}{17}\right) + 2\left(\frac{4}{5}\right) + 2\left(\frac{16}{25}\right) + \frac{1}{2}\right) \\
+&= \frac{5323}{6800} \approx 0.7828
+\end{align*}
+
+\textbf{(4) Simpson's Rule ($S_4$):}
+\begin{align*}
+S_4 &= \frac{\Delta x}{3} [f(x_0) + 4f(x_1) + 2f(x_2) + 4f(x_3) + f(x_4)] \\
+&= \frac{1}{12} \left(1 + 4\left(\frac{16}{17}\right) + 2\left(\frac{4}{5}\right) + 4\left(\frac{16}{25}\right) + \frac{1}{2}\right) \\
+&= \frac{8011}{10200} \approx 0.785392
+\end{align*}
+(Note: The true value is $\frac{\pi}{4} \approx 0.785398$, so $S_4$ gives a very accurate approximation.)
+\end{solution}
+
+\subsection{Polar Coordinate: Area Enclosed by Curve}
+
+\begin{exercise}
+Draw the figure of the following curves and evaluate the areas enclosed by these curves.
+\begin{enumerate}
+	\item $r=a\theta$, $\theta=0$ to $\theta=2\pi$
+	\item $r=ae^\theta$, $\theta=0$ to $\theta=2\pi$
+	\item $r^2=a^2\cos2\theta$
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+\textbf{Idea.} Apply the polar area formula $A = \frac{1}{2}\int r^2\,d\theta$. For closed curves, consider symmetry to simplify the integral limits.
+
+\textbf{(1) Archimedean spiral} ($r=a\theta$) \\
+The area swept out as $\theta$ goes from $0$ to $2\pi$ is:
+\begin{align*}
+A &= \int_{0}^{2\pi} \frac{1}{2} r^2 \,d\theta \\
+&= \frac{1}{2} \int_{0}^{2\pi} (a\theta)^2 \,d\theta \\
+&= \frac{a^2}{2} \int_{0}^{2\pi} \theta^2 \,d\theta \\
+&= \frac{a^2}{2} \left[ \frac{\theta^3}{3} \right]_0^{2\pi} \\
+&= \frac{a^2}{2} \left( \frac{8\pi^3}{3} - 0 \right) \\
+&= \frac{4}{3}\pi^3 a^2
+\end{align*}
+
+\textbf{(2) Logarithmic spiral} ($r=ae^\theta$) \\
+The area swept out from $\theta=0$ to $\theta=2\pi$ is:
+\begin{align*}
+A &= \int_{0}^{2\pi} \frac{1}{2} r^2 \,d\theta \\
+&= \frac{1}{2} \int_{0}^{2\pi} (ae^\theta)^2 \,d\theta \\
+&= \frac{a^2}{2} \int_{0}^{2\pi} e^{2\theta} \,d\theta \\
+&= \frac{a^2}{2} \left[ \frac{1}{2} e^{2\theta} \right]_0^{2\pi} \\
+&= \frac{a^2}{4} (e^{4\pi} - 1)
+\end{align*}
+
+\textbf{(3) Lemniscate of Bernoulli} ($r^2=a^2\cos2\theta$) \\
+Notice that $r^2$ must be non-negative, so $\cos2\theta \ge 0$. This means for the principal loop, $2\theta \in [-\frac{\pi}{2}, \frac{\pi}{2}]$, or $\theta \in [-\frac{\pi}{4}, \frac{\pi}{4}]$. The period of $\cos2\theta$ is $\pi$.
+Moreover, we have $\cos2(-\theta) = \cos2\theta$ and $\cos2(\pi-\theta) = \cos(2\pi-2\theta) = \cos2\theta$, which shows the curve is symmetric with respect to both the $x$-axis and the $y$-axis.
+Therefore, we only need to calculate the area in the first quadrant, where $\theta \in [0, \frac{\pi}{4}]$, and then multiply the result by 4.
+\begin{align*}
+A &= 4 \times \int_{0}^{\frac{\pi}{4}} \frac{1}{2} r^2 \,d\theta \\
+&= 2 \int_{0}^{\frac{\pi}{4}} a^2\cos2\theta \,d\theta \\
+&= 2a^2 \left[ \frac{1}{2}\sin2\theta \right]_0^{\frac{\pi}{4}} \\
+&= a^2 \left(\sin\frac{\pi}{2} - \sin0\right) \\
+&= a^2
+\end{align*}
+
+\begin{figure}[H]
+	\centering
+	\begin{minipage}[b]{0.32\textwidth}
+		\centering
+		\includegraphics[width=0.95\textwidth]{"../past_editions/week 7/Archimedean_spiral"}
+		\caption*{Archimedean spiral}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[b]{0.32\textwidth}
+		\centering
+		\includegraphics[width=0.95\textwidth]{"../past_editions/week 7/Logarithmic_Spiral"}
+		\caption*{Logarithmic spiral}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[b]{0.32\textwidth}
+		\centering
+		\includegraphics[width=0.95\textwidth]{"../past_editions/week 7/Lemniscate_of_Bernoulli"}
+		\caption*{Lemniscate of Bernoulli}
+	\end{minipage}
+\end{figure}
+\end{solution}
+
+\subsection{Polar Coordinate: Arc Length}
+
+\begin{exercise}
+Find the arc length of the following curves.
+\begin{enumerate}
+	\item $r=a(1-\cos\theta),\ 0\leq\theta\leq2\pi$
+	\item $r=a\theta, \ 0\leq\theta\leq2\pi$
+	\item $r=a\sin^3\frac{\theta}{3}, \ 0\leq\theta\leq3\pi$
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+\textbf{Idea.} We use the arc length formula $L = \int \sqrt{r^2 + (r')^2} \,d\theta$. It is highly recommended to compute and simplify $r^2 + (r')^2$ first before placing it inside the square root.
+
+\textbf{(1)} For $r=a(1-\cos\theta)$, we have $r' = a\sin\theta$.
+First, calculate $r^2 + (r')^2$:
+\begin{align*}
+r^2 + (r')^2 &= a^2(1-\cos\theta)^2 + (a\sin\theta)^2 \\
+&= a^2(1 - 2\cos\theta + \cos^2\theta) + a^2\sin^2\theta \\
+&= a^2(1 - 2\cos\theta + \cos^2\theta + \sin^2\theta) \\
+&= a^2(2 - 2\cos\theta) \\
+&= 2a^2(1 - \cos\theta)
+\end{align*}
+Using the half-angle formula $1-\cos\theta = 2\sin^2\frac{\theta}{2}$, we get:
+\[
+r^2 + (r')^2 = 2a^2 \left(2\sin^2\frac{\theta}{2}\right) = 4a^2\sin^2\frac{\theta}{2}
+\]
+Since $0 \leq \theta \leq 2\pi$, we have $0 \leq \frac{\theta}{2} \leq \pi$, meaning $\sin\frac{\theta}{2} \geq 0$. Thus, the square root simplifies nicely:
+\[
+\sqrt{r^2 + (r')^2} = 2a\sin\frac{\theta}{2}
+\]
+Now evaluate the integral:
+\begin{align*}
+L &= \int_{0}^{2\pi} 2a\sin\frac{\theta}{2} \,d\theta \\
+&= 2a \left[ -2\cos\frac{\theta}{2} \right]_0^{2\pi} \\
+&= -4a (\cos\pi - \cos0) \\
+&= -4a (-1 - 1) = 8a
+\end{align*}
+
+\textbf{(2)} For $r=a\theta$, we have $r' = a$.
+Calculate $r^2 + (r')^2$:
+\[
+r^2 + (r')^2 = a^2\theta^2 + a^2 = a^2(1+\theta^2)
+\]
+Thus, the arc length integral is:
+\[
+L = \int_{0}^{2\pi} \sqrt{a^2(1+\theta^2)} \,d\theta = \int_{0}^{2\pi} a\sqrt{1+\theta^2} \,d\theta
+\]
+We can evaluate this integral using the known formula for $\int \sqrt{1+x^2}\,dx$ (derived via trigonometric substitution $x = \tan t$):
+\begin{align*}
+L &= a \left[ \frac{\theta}{2}\sqrt{1+\theta^2} + \frac{1}{2}\ln(\theta + \sqrt{1+\theta^2}) \right]_0^{2\pi} \\
+&= a \left( \frac{2\pi}{2}\sqrt{1+4\pi^2} + \frac{1}{2}\ln(2\pi + \sqrt{1+4\pi^2}) - 0 \right) \\
+&= \pi a\sqrt{1+4\pi^2} + \frac{a}{2}\ln(2\pi + \sqrt{1+4\pi^2})
+\end{align*}
+
+\textbf{(3)} For $r=a\sin^3\frac{\theta}{3}$, using the chain rule we have $r' = a \cdot 3\sin^2\frac{\theta}{3} \cdot \cos\frac{\theta}{3} \cdot \frac{1}{3} = a\sin^2\frac{\theta}{3}\cos\frac{\theta}{3}$.
+Calculate $r^2 + (r')^2$:
+\begin{align*}
+r^2 + (r')^2 &= \left(a\sin^3\frac{\theta}{3}\right)^2 + \left(a\sin^2\frac{\theta}{3}\cos\frac{\theta}{3}\right)^2 \\
+&= a^2\sin^6\frac{\theta}{3} + a^2\sin^4\frac{\theta}{3}\cos^2\frac{\theta}{3} \\
+&= a^2\sin^4\frac{\theta}{3} \left(\sin^2\frac{\theta}{3} + \cos^2\frac{\theta}{3}\right) \\
+&= a^2\sin^4\frac{\theta}{3}
+\end{align*}
+Taking the square root (since $0 \leq \theta \leq 3\pi$, we have $0 \leq \frac{\theta}{3} \leq \pi$, so $\sin\frac{\theta}{3} \geq 0$):
+\[
+\sqrt{r^2 + (r')^2} = a\sin^2\frac{\theta}{3}
+\]
+Now integrate using the half-angle identity $\sin^2 x = \frac{1-\cos2x}{2}$:
+\begin{align*}
+L &= \int_{0}^{3\pi} a\sin^2\frac{\theta}{3} \,d\theta \\
+&= a \int_{0}^{3\pi} \frac{1 - \cos\frac{2\theta}{3}}{2} \,d\theta \\
+&= \frac{a}{2} \left[ \theta - \frac{3}{2}\sin\frac{2\theta}{3} \right]_0^{3\pi} \\
+&= \frac{a}{2} \left( 3\pi - \frac{3}{2}\sin(2\pi) - (0 - 0) \right) \\
+&= \frac{3\pi a}{2}
+\end{align*}
+
+\end{solution}
+
+\end{document}
