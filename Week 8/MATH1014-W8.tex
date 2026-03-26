@@ -1,0 +1,368 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{tikz}
+\usepackage{caption}
+\usetikzlibrary{arrows.meta,calc,patterns}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  urlcolor=blue,
+  citecolor=blue
+}
+
+\setlist[enumerate]{itemsep=0.25em,topsep=0.25em}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+
+\theoremstyle{definition}
+\newtheorem{exercise}{Exercise}[section]
+
+\newenvironment{solution}{\begin{proof}[Solution]}{\end{proof}}
+
+\DeclareMathOperator{\Area}{Area}
+\DeclareMathOperator{\Vol}{Vol}
+
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{18.1pt}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\IfFileExists{../Week 2/hkust-crest.png}{\includegraphics[height=14pt]{../Week 2/hkust-crest.png}}{}}
+\fancyhead[C]{MATH1014 Calculus II Tutorial}
+\fancyhead[R]{Week 8}
+\fancyfoot[C]{\thepage\ /\ \pageref{LastPage}}
+
+\title{\vspace{-1.0em}MATH1014 Calculus II Tutorial\\Week 8}
+\author{Wenkai Fan}
+\date{}
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+\section{Review}
+
+\subsection{Type 1: Improper Integrals over Infinite Intervals}
+An integral is improper of Type 1 if the interval of integration is infinite. We define these integrals using limits:
+\begin{enumerate}
+    \item $\displaystyle \int_a^{\infty} f(x)\,dx = \lim_{t \to \infty} \int_a^t f(x)\,dx$
+    \item $\displaystyle \int_{-\infty}^b f(x)\,dx = \lim_{t \to -\infty} \int_t^b f(x)\,dx$
+    \item $\displaystyle \int_{-\infty}^{\infty} f(x)\,dx = \int_{-\infty}^c f(x)\,dx + \int_c^{\infty} f(x)\,dx$ (for any real number $c$).
+\end{enumerate}
+The improper integral is \textbf{convergent} if the corresponding limit exists and is finite. Otherwise, it is \textbf{divergent}. In case 3, \textit{both} integrals must converge for the whole integral to be convergent.
+
+\subsection{Type 2: Improper Integrals with Discontinuous Integrands}
+An integral is improper of Type 2 if the integrand $f(x)$ has an infinite discontinuity (a vertical asymptote) at some point in the interval $[a, b]$.
+\begin{enumerate}
+    \item If $f$ is continuous on $[a, b)$ and discontinuous at $b$: $\displaystyle \int_a^b f(x)\,dx = \lim_{t \to b^-} \int_a^t f(x)\,dx$
+    \item If $f$ is continuous on $(a, b]$ and discontinuous at $a$: $\displaystyle \int_a^b f(x)\,dx = \lim_{t \to a^+} \int_t^b f(x)\,dx$
+    \item If $f$ has a discontinuity at $c$, where $a < c < b$: $\displaystyle \int_a^b f(x)\,dx = \int_a^c f(x)\,dx + \int_c^b f(x)\,dx$
+\end{enumerate}
+
+\subsection{Comparison Theorem for Improper Integrals}
+Sometimes we only need to know whether an integral converges or diverges without calculating its exact value. Suppose $f$ and $g$ are continuous functions with $0 \le f(x) \le g(x)$ for $x \ge a$:
+\begin{itemize}
+    \item If $\displaystyle \int_a^{\infty} g(x)\,dx$ is \textbf{convergent}, then $\displaystyle \int_a^{\infty} f(x)\,dx$ is also \textbf{convergent}.
+    \item If $\displaystyle \int_a^{\infty} f(x)\,dx$ is \textbf{divergent}, then $\displaystyle \int_a^{\infty} g(x)\,dx$ is also \textbf{divergent}.
+\end{itemize}
+\textbf{Useful Reference Integral (the $p$-integral):} 
+$\displaystyle \int_1^{\infty} \frac{1}{x^p} \,dx$ converges if $p > 1$ and diverges if $p \le 1$.
+
+Similarly, we often need comparison on a finite interval near a singular point. Suppose $f$ and $g$ are continuous functions on $(0,1]$ and satisfy $0 \le f(x) \le g(x)$ for $0 < x \le 1$:
+\begin{itemize}
+    \item If $\displaystyle \int_0^{1} g(x)\,dx$ is \textbf{convergent}, then $\displaystyle \int_0^{1} f(x)\,dx$ is also \textbf{convergent}.
+    \item If $\displaystyle \int_0^{1} f(x)\,dx$ is \textbf{divergent}, then $\displaystyle \int_0^{1} g(x)\,dx$ is also \textbf{divergent}.
+\end{itemize}
+\textbf{Useful Reference Integral near 0 (the $p$-integral):}
+$\displaystyle \int_0^{1} \frac{1}{x^p} \,dx$ converges if $p < 1$ and diverges if $p \ge 1$.
+
+\section{Exercises}
+
+\subsection{Evaluating Type 1 Improper Integrals}
+
+\begin{exercise}
+Evaluate the following integral if it is convergent: $\displaystyle \int_0^{+\infty} e^{-2x}\sin(5x)\,dx$.
+\end{exercise}
+
+\begin{solution}
+\textbf{Idea.} This is a Type 1 improper integral. We will evaluate the indefinite integral first using integration by parts, and then take the limit as the upper bound approaches infinity.
+
+Let $I = \int e^{-2x} \sin(5x) \,dx$. We use integration by parts:
+\[
+\int u\,dv = uv - \int v\,du
+\]
+Let $u = e^{-2x}$ and $dv = \sin(5x)\,dx$. Then $du = -2e^{-2x}\,dx$ and $v = -\frac{1}{5}\cos(5x)$.
+\begin{align*}
+I &= -\frac{1}{5}e^{-2x}\cos(5x) - \int \left(-\frac{1}{5}\cos(5x)\right) \left(-2e^{-2x}\right) \,dx \\
+  &= -\frac{1}{5}e^{-2x}\cos(5x) - \frac{2}{5} \int e^{-2x}\cos(5x) \,dx
+\end{align*}
+Now apply integration by parts again to $\int e^{-2x}\cos(5x) \,dx$. Let $u = e^{-2x}$ and $dv = \cos(5x)\,dx$. Then $du = -2e^{-2x}\,dx$ and $v = \frac{1}{5}\sin(5x)$.
+\begin{align*}
+\int e^{-2x}\cos(5x) \,dx &= \frac{1}{5}e^{-2x}\sin(5x) - \int \frac{1}{5}\sin(5x) \left(-2e^{-2x}\right) \,dx \\
+&= \frac{1}{5}e^{-2x}\sin(5x) + \frac{2}{5} \int e^{-2x}\sin(5x) \,dx \\
+&= \frac{1}{5}e^{-2x}\sin(5x) + \frac{2}{5} I
+\end{align*}
+Substitute this back into our equation for $I$:
+\begin{align*}
+I &= -\frac{1}{5}e^{-2x}\cos(5x) - \frac{2}{5} \left( \frac{1}{5}e^{-2x}\sin(5x) + \frac{2}{5} I \right) \\
+I &= -\frac{1}{5}e^{-2x}\cos(5x) - \frac{2}{25}e^{-2x}\sin(5x) - \frac{4}{25} I
+\end{align*}
+Add $\frac{4}{25}I$ to both sides:
+\begin{align*}
+\frac{29}{25} I &= e^{-2x} \left( -\frac{1}{5}\cos(5x) - \frac{2}{25}\sin(5x) \right) \\
+I &= \frac{e^{-2x}}{29} \left( -5\cos(5x) - 2\sin(5x) \right) + C
+\end{align*}
+Now, we evaluate the improper integral:
+\begin{align*}
+\int_0^{+\infty} e^{-2x}\sin(5x)\,dx &= \lim_{t \to \infty} \left[ \frac{e^{-2x}}{29} \left( -5\cos(5x) - 2\sin(5x) \right) \right]_0^t \\
+&= \lim_{t \to \infty} \frac{e^{-2t}}{29} \left( -5\cos(5t) - 2\sin(5t) \right) - \frac{e^0}{29} \left( -5\cos(0) - 2\sin(0) \right)
+\end{align*}
+Since $\cos(5t)$ and $\sin(5t)$ are bounded between $-1$ and $1$, and $\lim_{t \to \infty} e^{-2t} = 0$, the limit of the first term is $0$ by the Squeeze Theorem.
+Thus, the integral evaluates to:
+\[
+0 - \frac{1}{29}(-5) = \frac{5}{29}
+\]
+The integral converges to $\frac{5}{29}$.
+\end{solution}
+
+\begin{exercise}
+Evaluate the following integral if it is convergent: $\displaystyle \int_{-\infty}^{+\infty} \frac{1}{x^2+x+1}\,dx$.
+\end{exercise}
+
+\begin{solution}
+\textbf{Idea.} We complete the square in the denominator to use the arctangent integration formula.
+
+First, complete the square for $x^2 + x + 1$:
+\[
+x^2 + x + 1 = \left(x + \frac{1}{2}\right)^2 - \frac{1}{4} + 1 = \left(x + \frac{1}{2}\right)^2 + \frac{3}{4} = \left(x + \frac{1}{2}\right)^2 + \left(\frac{\sqrt{3}}{2}\right)^2
+\]
+The indefinite integral is:
+\[
+\int \frac{1}{\left(x + \frac{1}{2}\right)^2 + \left(\frac{\sqrt{3}}{2}\right)^2} \,dx = \frac{1}{\frac{\sqrt{3}}{2}} \arctan\left( \frac{x + \frac{1}{2}}{\frac{\sqrt{3}}{2}} \right) + C = \frac{2}{\sqrt{3}} \arctan\left( \frac{2x+1}{\sqrt{3}} \right) + C
+\]
+Since the interval is $(-\infty, \infty)$, we formally split the integral at $x = 0$ (or just evaluate the limits at both infinities):
+\begin{align*}
+\int_{-\infty}^{+\infty} \frac{1}{x^2+x+1}\,dx &= \lim_{t \to \infty} \int_0^t \frac{1}{x^2+x+1}\,dx + \lim_{s \to -\infty} \int_s^0 \frac{1}{x^2+x+1}\,dx \\
+&= \lim_{t \to \infty} \left[ \frac{2}{\sqrt{3}} \arctan\left( \frac{2x+1}{\sqrt{3}} \right) \right]_0^t + \lim_{s \to -\infty} \left[ \frac{2}{\sqrt{3}} \arctan\left( \frac{2x+1}{\sqrt{3}} \right) \right]_s^0
+\end{align*}
+Notice that the terms evaluated at $0$ will cancel each other out, so we only need the limits:
+\begin{align*}
+&= \lim_{t \to \infty} \frac{2}{\sqrt{3}} \arctan\left( \frac{2t+1}{\sqrt{3}} \right) - \lim_{s \to -\infty} \frac{2}{\sqrt{3}} \arctan\left( \frac{2s+1}{\sqrt{3}} \right) \\
+&= \frac{2}{\sqrt{3}} \left( \frac{\pi}{2} \right) - \frac{2}{\sqrt{3}} \left( -\frac{\pi}{2} \right) \\
+&= \frac{2\pi}{\sqrt{3}}
+\end{align*}
+The integral converges to $\frac{2\pi}{\sqrt{3}}$.
+\end{solution}
+
+\begin{exercise}
+Evaluate the following integral if it is convergent: $\displaystyle \int_0^{+\infty} xe^{ax^2}\,dx$ (discuss the value of constant $a$).
+\end{exercise}
+
+\begin{solution}
+\textbf{Idea.} The convergence depends entirely on the sign of $a$. We discuss three cases: $a=0$, $a>0$, and $a<0$.
+
+\textbf{Case 1: $a = 0$} \\
+The integral becomes $\int_0^{+\infty} x \,dx$.
+\[
+\lim_{t \to \infty} \int_0^t x \,dx = \lim_{t \to \infty} \left[ \frac{x^2}{2} \right]_0^t = \lim_{t \to \infty} \frac{t^2}{2} = \infty
+\]
+The integral is divergent.
+
+\textbf{Case 2: $a \neq 0$} \\
+We use substitution $u = ax^2$, $du = 2ax \,dx \implies x\,dx = \frac{1}{2a}du$.
+The indefinite integral is:
+\[
+\int xe^{ax^2}\,dx = \int \frac{1}{2a} e^u \,du = \frac{1}{2a} e^u = \frac{1}{2a} e^{ax^2} + C
+\]
+Now we evaluate the improper integral:
+\[
+\int_0^{+\infty} xe^{ax^2}\,dx = \lim_{t \to \infty} \left[ \frac{1}{2a} e^{ax^2} \right]_0^t = \lim_{t \to \infty} \left( \frac{1}{2a} e^{at^2} - \frac{1}{2a} \right)
+\]
+\begin{itemize}
+    \item \textbf{If $a > 0$:} As $t \to \infty$, $e^{at^2} \to \infty$. Thus, the limit does not exist (it goes to infinity), and the integral is \textbf{divergent}.
+    \item \textbf{If $a < 0$:} As $t \to \infty$, $e^{at^2} \to 0$. Thus, the limit is $0 - \frac{1}{2a} = -\frac{1}{2a}$. The integral is \textbf{convergent}.
+\end{itemize}
+
+In conclusion, the integral converges to $-\frac{1}{2a}$ if $a < 0$, and diverges if $a \ge 0$.
+\end{solution}
+
+\subsection{Evaluating Type 2 Improper Integrals}
+
+\begin{exercise}
+Evaluate the following integral if it is convergent: $\displaystyle \int_0^1\frac{1}{(2-x)\sqrt{1-x}}\,dx$.
+\end{exercise}
+
+\begin{solution}
+\textbf{Idea.} The integrand has a vertical asymptote at $x = 1$, making it a Type 2 improper integral. We will evaluate it using limits and the substitution $u = \sqrt{1-x}$.
+
+By definition, we write:
+\[
+\int_0^1\frac{1}{(2-x)\sqrt{1-x}}\,dx = \lim_{c \to 1^-} \int_0^c \frac{1}{(2-x)\sqrt{1-x}}\,dx
+\]
+Let $u = \sqrt{1-x}$. Then $u^2 = 1-x$, so $x = 1-u^2$, and $dx = -2u \,du$.
+Also, $2-x = 2 - (1-u^2) = 1+u^2$.
+
+When $x = 0$, $u = \sqrt{1-0} = 1$. \\
+When $x = c$, $u = \sqrt{1-c}$.
+\begin{align*}
+\int_0^c \frac{1}{(2-x)\sqrt{1-x}}\,dx &= \int_1^{\sqrt{1-c}} \frac{1}{(1+u^2)u} (-2u) \,du \\
+&= \int_1^{\sqrt{1-c}} \frac{-2}{1+u^2} \,du \\
+&= \int_{\sqrt{1-c}}^1 \frac{2}{1+u^2} \,du \\
+&= \left[ 2\arctan u \right]_{\sqrt{1-c}}^1 \\
+&= 2\arctan(1) - 2\arctan(\sqrt{1-c}) \\
+&= 2\left(\frac{\pi}{4}\right) - 2\arctan(\sqrt{1-c}) = \frac{\pi}{2} - 2\arctan(\sqrt{1-c})
+\end{align*}
+Now, taking the limit as $c \to 1^-$:
+\[
+\lim_{c \to 1^-} \left( \frac{\pi}{2} - 2\arctan(\sqrt{1-c}) \right) = \frac{\pi}{2} - 2\arctan(0) = \frac{\pi}{2}
+\]
+The integral converges to $\frac{\pi}{2}$.
+\end{solution}
+
+\begin{exercise}
+Evaluate the following integral if it is convergent: $\displaystyle \int_{-1}^1\frac{1}{x^3}\sin\left(\frac{1}{x^2}\right)\,dx$.
+\end{exercise}
+
+\begin{solution}
+\textbf{Idea.} The integrand is discontinuous at $x=0$, which is inside the interval $[-1, 1]$. We must split the integral at $x=0$.
+\[
+\int_{-1}^1\frac{1}{x^3}\sin\left(\frac{1}{x^2}\right)\,dx = \int_{-1}^0\frac{1}{x^3}\sin\left(\frac{1}{x^2}\right)\,dx + \int_{0}^1\frac{1}{x^3}\sin\left(\frac{1}{x^2}\right)\,dx
+\]
+If either of these integrals diverges, the whole integral diverges. Let's analyze the second one:
+\[
+\int_0^1\frac{1}{x^3}\sin\left(\frac{1}{x^2}\right)\,dx = \lim_{c \to 0^+} \int_c^1 \frac{1}{x^3}\sin\left(\frac{1}{x^2}\right)\,dx
+\]
+Let $u = \frac{1}{x^2}$, then $du = -\frac{2}{x^3}\,dx$, so $\frac{1}{x^3}\,dx = -\frac{1}{2}\,du$.
+When $x = c$, $u = \frac{1}{c^2}$. When $x = 1$, $u = 1$.
+\begin{align*}
+\int_c^1 \frac{1}{x^3}\sin\left(\frac{1}{x^2}\right)\,dx &= \int_{1/c^2}^1 \sin(u) \left(-\frac{1}{2}\right) \,du \\
+&= \frac{1}{2} \int_1^{1/c^2} \sin(u) \,du \\
+&= \frac{1}{2} \left[ -\cos u \right]_1^{1/c^2} \\
+&= \frac{1}{2} \cos(1) - \frac{1}{2} \cos\left(\frac{1}{c^2}\right)
+\end{align*}
+Now, we must evaluate the limit:
+\[
+\lim_{c \to 0^+} \left( \frac{1}{2} \cos(1) - \frac{1}{2} \cos\left(\frac{1}{c^2}\right) \right)
+\]
+As $c \to 0^+$, the term $\frac{1}{c^2} \to \infty$. The function $\cos(x)$ oscillates between $-1$ and $1$ as its argument goes to infinity, meaning the limit $\lim_{c \to 0^+} \cos\left(\frac{1}{c^2}\right)$ \textbf{does not exist}.
+
+Because this limit does not exist, the integral $\int_0^1$ diverges. Consequently, the original integral $\int_{-1}^1$ is \textbf{divergent}.
+\end{solution}
+
+\subsection{Convergence Tests for Improper Integrals}
+
+\begin{exercise}
+Check whether the following integrals converge or not.
+\begin{enumerate}
+	\item $\displaystyle \int_1^{+\infty} \frac{1}{\sqrt{x^3+\ln x+1}} \,dx$
+	\item $\displaystyle \int_{1}^{+\infty} \frac{\arctan x}{1+x^3}\,dx$
+	\item $\displaystyle \int_0^{+\infty}\frac{1}{1+x\left|\sin x\right|}\,dx$
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+\textbf{Idea.} For these problems, we do not need to evaluate the integral exactly. We will use the Comparison Theorem by finding a simpler function $g(x)$ to compare with.
+
+\textbf{(1)} Consider $f(x) = \frac{1}{\sqrt{x^3+\ln x+1}}$ for $x \ge 1$. \\
+Since $x \ge 1$, we know that $\ln x \ge 0$. Therefore:
+\[
+x^3 + \ln x + 1 > x^3
+\]
+Taking the square root and then the reciprocal of both sides (which reverses the inequality):
+\[
+\frac{1}{\sqrt{x^3+\ln x+1}} < \frac{1}{\sqrt{x^3}} = \frac{1}{x^{3/2}}
+\]
+We compare our integral to $\int_1^{+\infty} \frac{1}{x^{3/2}} \,dx$. This is a $p$-integral with $p = \frac{3}{2} > 1$, so it \textbf{converges}. 
+Since $0 < f(x) < \frac{1}{x^{3/2}}$, by the Comparison Theorem, the original integral \textbf{converges}.
+
+\textbf{(2)} Consider $f(x) = \frac{\arctan x}{1+x^3}$ for $x \ge 1$. \\
+We know that for $x \ge 1$, $0 < \arctan x < \frac{\pi}{2}$. Also, $1 + x^3 > x^3$, which implies $\frac{1}{1+x^3} < \frac{1}{x^3}$.
+Combining these two inequalities, we get:
+\[
+0 < \frac{\arctan x}{1+x^3} < \frac{\pi/2}{x^3}
+\]
+The integral $\int_1^{+\infty} \frac{\pi/2}{x^3} \,dx = \frac{\pi}{2} \int_1^{+\infty} \frac{1}{x^3} \,dx$. This is a $p$-integral with $p = 3 > 1$, so it \textbf{converges}. 
+By the Comparison Theorem, the original integral \textbf{converges}.
+
+\textbf{(3)} Consider $f(x) = \frac{1}{1+x\left|\sin x\right|}$ for $x \ge 0$. \\
+We know that $0 \le |\sin x| \le 1$. Multiplying by $x$ (since $x \ge 0$), we get:
+\[
+0 \le x|\sin x| \le x
+\]
+Adding 1 to all sides:
+\[
+1 \le 1 + x|\sin x| \le 1 + x
+\]
+Taking the reciprocal reverses the inequality:
+\[
+\frac{1}{1+x|\sin x|} \ge \frac{1}{1+x} > 0
+\]
+Let's evaluate the integral of the smaller function:
+\[
+\int_0^{+\infty} \frac{1}{1+x} \,dx = \lim_{t \to \infty} \left[ \ln|1+x| \right]_0^t = \lim_{t \to \infty} \ln(1+t) = \infty
+\]
+Since the smaller integral diverges to infinity, our original integral is larger than infinity. By the Comparison Theorem, the original integral \textbf{diverges}.
+\end{solution}
+
+\subsection{Advanced Substitution in Improper Integrals}
+
+\begin{exercise}
+Suppose $a>0$, evaluate:
+\[
+\int_{0}^{+\infty}f\left(\frac{x}{a}+\frac{a}{x}\right)\frac{\ln x}{x}\,dx - \ln a\int_{0}^{+\infty}f\left(\frac{x}{a}+\frac{a}{x}\right)\frac{1}{x}\,dx
+\]
+\end{exercise}
+
+\begin{solution}
+\textbf{Idea.} Combine the two integrals into one, split the integration interval at $x=a$, and use a smart substitution $x = \frac{a^2}{t}$ on the $[a, +\infty)$ part to show it cancels out the $(0, a]$ part.
+
+First, combine the two integrals:
+\[
+I = \int_{0}^{+\infty} f\left(\frac{x}{a}+\frac{a}{x}\right) \frac{\ln x - \ln a}{x} \,dx
+\]
+We split the interval $(0, +\infty)$ into two parts: $(0, a]$ and $[a, +\infty)$:
+\[
+I = \int_{0}^{a} f\left(\frac{x}{a}+\frac{a}{x}\right) \frac{\ln x - \ln a}{x} \,dx + \int_{a}^{+\infty} f\left(\frac{x}{a}+\frac{a}{x}\right) \frac{\ln x - \ln a}{x} \,dx = I_1 + I_2
+\]
+Let's focus on $I_2 = \int_{a}^{+\infty} f\left(\frac{x}{a}+\frac{a}{x}\right) \frac{\ln x - \ln a}{x} \,dx$. \\
+We apply the substitution $x = \frac{a^2}{t}$. Then $dx = -\frac{a^2}{t^2} dt$.
+Let's see how the boundaries and the integrand terms change:
+\begin{itemize}
+    \item When $x \to +\infty$, $t \to 0^+$.
+    \item When $x = a$, $t = \frac{a^2}{a} = a$.
+    \item The argument of $f$: $\frac{x}{a} + \frac{a}{x} = \frac{a^2/t}{a} + \frac{a}{a^2/t} = \frac{a}{t} + \frac{t}{a}$. This is completely symmetric!
+    \item The logarithmic part: $\ln x - \ln a = \ln\left(\frac{a^2}{t}\right) - \ln a = \ln(a^2) - \ln t - \ln a = 2\ln a - \ln t - \ln a = \ln a - \ln t = -(\ln t - \ln a)$.
+    \item The denominator $x = \frac{a^2}{t}$.
+\end{itemize}
+Substituting these into $I_2$:
+\begin{align*}
+I_2 &= \int_{a}^{0} f\left(\frac{a}{t}+\frac{t}{a}\right) \frac{-(\ln t - \ln a)}{a^2/t} \left(-\frac{a^2}{t^2}\right) dt \\
+&= \int_{a}^{0} f\left(\frac{t}{a}+\frac{a}{t}\right) \frac{\ln t - \ln a}{t} \,dt
+\end{align*}
+Flipping the bounds of integration from $\int_a^0$ to $\int_0^a$ introduces a negative sign:
+\[
+I_2 = -\int_{0}^{a} f\left(\frac{t}{a}+\frac{a}{t}\right) \frac{\ln t - \ln a}{t} \,dt
+\]
+Notice that $t$ is just a dummy variable of integration. We can replace $t$ with $x$, and we get exactly the negative of $I_1$:
+\[
+I_2 = -\int_{0}^{a} f\left(\frac{x}{a}+\frac{a}{x}\right) \frac{\ln x - \ln a}{x} \,dx = -I_1
+\]
+Therefore, the original combined integral is:
+\[
+I = I_1 + I_2 = I_1 - I_1 = 0
+\]
+The final value of the expression is $0$.
+\end{solution}
+
+\end{document}
