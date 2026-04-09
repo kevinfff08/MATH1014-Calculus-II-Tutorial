@@ -1,0 +1,414 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{tikz}
+\usepackage{caption}
+\usetikzlibrary{arrows.meta,calc,patterns}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  urlcolor=blue,
+  citecolor=blue
+}
+
+\setlist[enumerate]{itemsep=0.25em,topsep=0.25em}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+
+\theoremstyle{definition}
+\newtheorem{exercise}{Exercise}[section]
+
+\newenvironment{solution}{\begin{proof}[Solution]}{\end{proof}}
+
+\DeclareMathOperator{\Area}{Area}
+\DeclareMathOperator{\Vol}{Vol}
+
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{18.1pt}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\IfFileExists{../Week 2/hkust-crest.png}{\includegraphics[height=14pt]{../Week 2/hkust-crest.png}}{}}
+\fancyhead[C]{MATH1014 Calculus II Tutorial}
+\fancyhead[R]{Week 10}
+\fancyfoot[C]{\thepage\ /\ \pageref{LastPage}}
+
+\title{\vspace{-1.0em}MATH1014 Calculus II Tutorial\\Week 10}
+\author{Wenkai Fan}
+\date{}
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+\section{Review}
+
+\subsection{Infinite Sequences}
+An infinite sequence is a list of numbers written in a definite order: $a_1, a_2, a_3, \dots, a_n, \dots$. 
+\begin{itemize}
+    \item \textbf{Squeeze Theorem for Sequences:} If $a_n \le b_n \le c_n$ for $n \ge n_0$ and $\lim_{n \to \infty} a_n = \lim_{n \to \infty} c_n = L$, then $\lim_{n \to \infty} b_n = L$.
+    \item \textbf{Monotonic Sequence Theorem:} Every bounded, monotonic sequence is convergent.
+\end{itemize}
+
+\subsection{Infinite Series: Basic Properties \& Divergence Test}
+An infinite series is the sum of an infinite sequence: $\sum_{n=1}^\infty a_n = a_1 + a_2 + \dots$. 
+The series converges if the sequence of partial sums $S_n = \sum_{k=1}^n a_k$ converges to a finite limit $S$.
+\begin{itemize}
+    \item \textbf{Test for Divergence:} If $\lim_{n \to \infty} a_n$ does not exist or if $\lim_{n \to \infty} a_n \neq 0$, then the series $\sum_{n=1}^\infty a_n$ is \textbf{divergent}. (Note: If $\lim a_n = 0$, the test is inconclusive).
+    \item \textbf{Telescoping Series:} These are series where most terms cancel out when calculating the partial sum $S_n$. Find an explicit formula for $S_n$, then evaluate $\lim_{n \to \infty} S_n$.
+\end{itemize}
+
+\subsection{The Integral Test}
+Suppose $f$ is a continuous, positive, decreasing function on $[1, \infty)$ and let $a_n = f(n)$.
+\begin{itemize}
+    \item If $\int_1^\infty f(x) \,dx$ is convergent, then $\sum_{n=1}^\infty a_n$ is convergent.
+    \item If $\int_1^\infty f(x) \,dx$ is divergent, then $\sum_{n=1}^\infty a_n$ is divergent.
+\end{itemize}
+
+\subsection{Comparison Tests}
+\begin{itemize}
+    \item \textbf{The Comparison Test:} Suppose $\sum a_n$ and $\sum b_n$ are series with positive terms.
+        \begin{itemize}
+            \item If $\sum b_n$ is convergent and $a_n \le b_n$ for all $n$, then $\sum a_n$ is also convergent.
+            \item If $\sum b_n$ is divergent and $a_n \ge b_n$ for all $n$, then $\sum a_n$ is also divergent.
+        \end{itemize}
+    \item \textbf{The Limit Comparison Test:} Suppose $\sum a_n$ and $\sum b_n$ are series with positive terms. If $\lim_{n \to \infty} \frac{a_n}{b_n} = c$ where $c > 0$ is a finite number, then either both series converge or both diverge.
+\end{itemize}
+
+\newpage
+
+\section{Exercises}
+
+\subsection{Infinite Sequences}
+
+\begin{exercise}
+Find the limit of the following sequences.
+\begin{enumerate}
+    \item $\displaystyle a_n = \frac{1}{n+\sqrt{1}} + \frac{1}{n+\sqrt{2}} + \cdots + \frac{1}{n+\sqrt{n}}$
+    \item $\displaystyle a_n = \sum_{k=n^2}^{(n+1)^2} \frac{1}{\sqrt{k}}$
+    \item $\displaystyle a_n = \frac{1\cdot 3\cdot 5 \cdots (2n-1)}{2\cdot 4\cdot 6 \cdots (2n)}$
+    \item $\displaystyle x_1=1, x_{n+1}=\sqrt{4+3x_n}$
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+\textbf{(1)} \textbf{Idea.} The sequence $a_n$ is a sum of $n$ terms. Since we cannot directly evaluate the sum, we use the \textbf{Squeeze Theorem}. 
+
+Every term in the sum has the form $\frac{1}{n+\sqrt{k}}$ for $k=1, 2, \dots, n$.
+The smallest denominator is $n+\sqrt{1}$, which gives the largest term: $\frac{1}{n+\sqrt{1}}$.
+The largest denominator is $n+\sqrt{n}$, which gives the smallest term: $\frac{1}{n+\sqrt{n}}$.
+Therefore, we can bound the sum $a_n$:
+\[
+n \times \left( \frac{1}{n+\sqrt{n}} \right) \le \frac{1}{n+\sqrt{1}} + \dots + \frac{1}{n+\sqrt{n}} \le n \times \left( \frac{1}{n+\sqrt{1}} \right)
+\]
+Simplifying the bounds:
+\[
+\frac{n}{n+\sqrt{n}} \le a_n \le \frac{n}{n+1}
+\]
+Now we evaluate the limit of the bounds as $n \to \infty$:
+\[
+\lim_{n \to \infty} \frac{n}{n+1} = \lim_{n \to \infty} \frac{1}{1 + \frac{1}{n}} = 1
+\]
+\[
+\lim_{n \to \infty} \frac{n}{n+\sqrt{n}} = \lim_{n \to \infty} \frac{1}{1 + \frac{1}{\sqrt{n}}} = 1
+\]
+Since both the lower and upper bounds converge to $1$, by the Squeeze Theorem, $\lim_{n \to \infty} a_n = 1$.
+
+\textbf{(2)} \textbf{Idea.} Use the Squeeze Theorem. Notice that the number of terms in the sum is $(n+1)^2 - n^2 + 1 = n^2 + 2n + 1 - n^2 + 1 = 2n + 2$.
+
+The terms in the sum are of the form $\frac{1}{\sqrt{k}}$ for $k = n^2, n^2+1, \dots, (n+1)^2$.
+The largest term corresponds to the smallest $k$, which is $k=n^2$. Thus, the largest term is $\frac{1}{\sqrt{n^2}} = \frac{1}{n}$.
+The smallest term corresponds to the largest $k$, which is $k=(n+1)^2$. Thus, the smallest term is $\frac{1}{\sqrt{(n+1)^2}} = \frac{1}{n+1}$.
+We bound the sum $a_n$:
+\[
+(\text{number of terms}) \times \text{smallest term} \le a_n \le (\text{number of terms}) \times \text{largest term}
+\]
+\[
+(2n+2) \times \frac{1}{n+1} \le a_n \le (2n+2) \times \frac{1}{n}
+\]
+Simplifying the lower bound:
+\[
+\frac{2n+2}{n+1} = \frac{2(n+1)}{n+1} = 2
+\]
+Simplifying the upper bound:
+\[
+\frac{2n+2}{n} = 2 + \frac{2}{n}
+\]
+Thus, we have:
+\[
+2 \le a_n \le 2 + \frac{2}{n}
+\]
+As $n \to \infty$, $\lim_{n \to \infty} \left( 2 + \frac{2}{n} \right) = 2$.
+By the Squeeze Theorem, $\lim_{n \to \infty} a_n = 2$.
+
+\textbf{(3)} \textbf{Idea.} Use the Squeeze Theorem by establishing an inequality for each fraction in the product.
+
+Notice that for any $k > 0$, we have $(2k)^2 = 4k^2$. Also, $(2k-1)(2k+1) = 4k^2 - 1$.
+Since $4k^2 > 4k^2 - 1$, we have:
+\[
+(2k)^2 > (2k-1)(2k+1) \implies 2k > \sqrt{(2k-1)(2k+1)} \implies \frac{1}{2k} < \frac{1}{\sqrt{(2k-1)(2k+1)}}
+\]
+We can use this to bound $a_n$. Since all terms are positive, $a_n > 0$.
+\begin{align*}
+0 < a_n &= \frac{1\cdot 3\cdot 5 \cdots (2n-1)}{2\cdot 4\cdot 6 \cdots (2n)} \\
+&= \left(\frac{1}{2}\right) \cdot \left(\frac{3}{4}\right) \cdot \left(\frac{5}{6}\right) \cdots \left(\frac{2n-1}{2n}\right) \\
+&< \left(\frac{1}{\sqrt{1 \cdot 3}}\right) \cdot \left(\frac{3}{\sqrt{3 \cdot 5}}\right) \cdot \left(\frac{5}{\sqrt{5 \cdot 7}}\right) \cdots \left(\frac{2n-1}{\sqrt{(2n-1)(2n+1)}}\right)
+\end{align*}
+Notice that in the numerator we have $1 \cdot 3 \cdot 5 \cdots (2n-1)$. In the denominator we have square roots. We can rewrite the numerator $k$ as $\sqrt{k \cdot k}$:
+\begin{align*}
+a_n &< \frac{\sqrt{1 \cdot 1}}{\sqrt{1 \cdot 3}} \cdot \frac{\sqrt{3 \cdot 3}}{\sqrt{3 \cdot 5}} \cdot \frac{\sqrt{5 \cdot 5}}{\sqrt{5 \cdot 7}} \cdots \frac{\sqrt{(2n-1)(2n-1)}}{\sqrt{(2n-1)(2n+1)}} \\
+&= \sqrt{ \frac{1 \cdot 1 \cdot 3 \cdot 3 \cdot 5 \cdot 5 \cdots (2n-1)(2n-1)}{1 \cdot 3 \cdot 3 \cdot 5 \cdot 5 \cdot 7 \cdots (2n-1)(2n+1)} }
+\end{align*}
+This is a telescoping product! Almost all terms cancel out, leaving only the $1$ in the numerator and the $2n+1$ in the denominator:
+\[
+0 < a_n < \sqrt{ \frac{1}{2n+1} } = \frac{1}{\sqrt{2n+1}}
+\]
+As $n \to \infty$, $\lim_{n \to \infty} \frac{1}{\sqrt{2n+1}} = 0$.
+By the Squeeze Theorem, $\lim_{n \to \infty} a_n = 0$.
+
+\textbf{(4)} \textbf{Idea.} First, assume the limit exists to find the potential value. Then, use Mathematical Induction to prove that the sequence is bounded and monotonic, which guarantees the limit exists by the Monotonic Sequence Theorem.
+
+\textbf{Step 1: Find the potential limit.} \\
+Suppose $\lim_{n \to \infty} x_n = L$. Then $\lim_{n \to \infty} x_{n+1} = L$ as well.
+Taking the limit of the recursive relation $x_{n+1} = \sqrt{4+3x_n}$, we get:
+\[
+L = \sqrt{4+3L} \implies L^2 = 4+3L \implies L^2 - 3L - 4 = 0 \implies (L-4)(L+1) = 0
+\]
+Thus, $L = 4$ or $L = -1$. Since $x_1 = 1 > 0$ and the sequence only involves adding positive numbers and taking positive square roots, all $x_n > 0$. Therefore, $L = 4$ is the only valid candidate.
+
+\textbf{Step 2: Prove the sequence is bounded above by 4 using Induction.} \\
+Base case: $x_1 = 1 < 4$. The statement holds for $n=1$. \\
+Inductive step: Assume $x_k < 4$ for some integer $k \ge 1$.
+Then for $k+1$:
+\[
+x_{k+1} = \sqrt{4+3x_k} < \sqrt{4+3(4)} = \sqrt{16} = 4
+\]
+Thus, by Mathematical Induction, $x_n < 4$ for all $n \ge 1$. The sequence is bounded above.
+
+\textbf{Step 3: Prove the sequence is monotonically increasing.} \\
+We want to show $x_{n+1} > x_n$ for all $n$.
+Since all $x_n > 0$, $x_{n+1} > x_n$ is equivalent to $x_{n+1}^2 > x_n^2$.
+\[
+x_{n+1}^2 - x_n^2 = (4+3x_n) - x_n^2 = -(x_n^2 - 3x_n - 4) = -(x_n - 4)(x_n + 1)
+\]
+From Step 2, we know $x_n < 4$, so $(x_n - 4) < 0$. Also, $x_n > 0 \implies (x_n + 1) > 0$.
+Therefore, $-(x_n - 4)(x_n + 1) > 0$, which means $x_{n+1}^2 - x_n^2 > 0 \implies x_{n+1} > x_n$.
+The sequence is strictly increasing.
+
+Since the sequence is monotonically increasing and bounded above, by the \textbf{Monotonic Sequence Theorem}, the sequence converges. Its limit must be the value we found in Step 1, so $\lim_{n \to \infty} x_n = 4$.
+\end{solution}
+
+\subsection{Basic Properties, Divergence Test \& Telescoping Series}
+
+\begin{exercise}
+Determine whether the following series converge or diverge.
+\begin{enumerate}
+    \item $\displaystyle \sum_{n=1}^{\infty} \frac{1}{\sqrt[n]{n}}$
+    \item $\displaystyle \sum_{n=1}^{\infty} \frac{\left[2+(-1)^n\right]^n}{2^{2n+1}}$
+    \item $\displaystyle \sum_{n=1}^{\infty} \frac{2}{(n+1)(n+3)}$
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+\textbf{(1)} Let $a_n = \frac{1}{\sqrt[n]{n}} = \frac{1}{n^{1/n}}$.
+First, let's check the limit of the terms $\lim_{n \to \infty} a_n$.
+Recall the standard limit $\lim_{n \to \infty} n^{1/n} = 1$. (This can be proven by taking the natural log: $\ln(n^{1/n}) = \frac{\ln n}{n}$. By L'Hôpital's Rule, $\lim_{x \to \infty} \frac{\ln x}{x} = \lim_{x \to \infty} \frac{1/x}{1} = 0$. Thus $n^{1/n} \to e^0 = 1$).
+Therefore,
+\[
+\lim_{n \to \infty} a_n = \lim_{n \to \infty} \frac{1}{n^{1/n}} = \frac{1}{1} = 1
+\]
+Since $\lim_{n \to \infty} a_n = 1 \neq 0$, by the \textbf{Test for Divergence}, the series \textbf{diverges}.
+
+\textbf{(2)} The term $(-1)^n$ oscillates depending on whether $n$ is even or odd. We can split the series into the sum of odd terms and even terms. If both sub-series converge, the original series converges.
+For odd terms ($n = 2k-1$ for $k=1, 2, \dots$):
+\[
+(-1)^n = -1 \implies [2+(-1)^n]^n = (2-1)^{2k-1} = 1^{2k-1} = 1
+\]
+The denominator is $2^{2(2k-1)+1} = 2^{4k-2+1} = 2^{4k-1}$.
+The odd terms series is:
+\[
+\sum_{k=1}^{\infty} \frac{1}{2^{4k-1}} = \sum_{k=1}^{\infty} 2 \cdot \left(\frac{1}{16}\right)^k
+\]
+This is a geometric series with common ratio $r = \frac{1}{16}$. Since $|r| < 1$, it converges.
+
+For even terms ($n = 2k$ for $k=1, 2, \dots$):
+\[
+(-1)^n = 1 \implies [2+(-1)^n]^n = (2+1)^{2k} = 3^{2k} = 9^k
+\]
+The denominator is $2^{2(2k)+1} = 2^{4k+1} = 2 \cdot 16^k$.
+The even terms series is:
+\[
+\sum_{k=1}^{\infty} \frac{9^k}{2 \cdot 16^k} = \sum_{k=1}^{\infty} \frac{1}{2} \left(\frac{9}{16}\right)^k
+\]
+This is a geometric series with common ratio $r = \frac{9}{16}$. Since $|r| < 1$, it converges.
+
+Because the series of odd terms and the series of even terms both converge, their sum (the original series) also \textbf{converges}.
+
+\textbf{(3)} Let's find an explicit formula for the partial sum $S_n$. We use partial fraction decomposition on the general term:
+\[
+\frac{2}{(n+1)(n+3)} = \frac{A}{n+1} + \frac{B}{n+3} \implies 2 = A(n+3) + B(n+1)
+\]
+Setting $n = -1 \implies 2 = A(2) \implies A = 1$. \\
+Setting $n = -3 \implies 2 = B(-2) \implies B = -1$.
+Thus, the general term is $\frac{1}{n+1} - \frac{1}{n+3}$.
+Now we write out the partial sum $S_n$:
+\begin{align*}
+S_n &= \sum_{i=1}^{n} \left( \frac{1}{i+1} - \frac{1}{i+3} \right) \\
+&= \left( \frac{1}{2} - \frac{1}{4} \right) \quad \text{(for } i=1) \\
+&\quad + \left( \frac{1}{3} - \frac{1}{5} \right) \quad \text{(for } i=2) \\
+&\quad + \left( \frac{1}{4} - \frac{1}{6} \right) \quad \text{(for } i=3) \\
+&\quad + \dots \\
+&\quad + \left( \frac{1}{n-1} - \frac{1}{n+1} \right) \quad \text{(for } i=n-2) \\
+&\quad + \left( \frac{1}{n} - \frac{1}{n+2} \right) \quad \text{(for } i=n-1) \\
+&\quad + \left( \frac{1}{n+1} - \frac{1}{n+3} \right) \quad \text{(for } i=n)
+\end{align*}
+Notice how terms cancel out: the $-\frac{1}{4}$ from $i=1$ cancels with $\frac{1}{4}$ from $i=3$, the $-\frac{1}{5}$ from $i=2$ cancels with $\frac{1}{5}$ from $i=4$, and so on. 
+The only terms that survive are the positive parts of the first two terms and the negative parts of the last two terms:
+\[
+S_n = \frac{1}{2} + \frac{1}{3} - \frac{1}{n+2} - \frac{1}{n+3}
+\]
+Now we take the limit to find the sum of the series:
+\[
+\sum_{n=1}^{\infty} \frac{2}{(n+1)(n+3)} = \lim_{n \to \infty} S_n = \lim_{n \to \infty} \left( \frac{5}{6} - \frac{1}{n+2} - \frac{1}{n+3} \right) = \frac{5}{6} - 0 - 0 = \frac{5}{6}
+\]
+Since the limit is finite, the series \textbf{converges} to $\frac{5}{6}$.
+\end{solution}
+
+\subsection{The Integral Test}
+
+\begin{exercise}
+Determine whether the following series converge or diverge.
+\begin{enumerate}
+    \item $\displaystyle \sum_{n=1}^{\infty} \frac{4n}{n^4+1}$
+    \item $\displaystyle \sum_{n=1}^{\infty} n^2 e^{-n}$
+    \item $\displaystyle \sum_{n=1}^{\infty} \frac{\ln n}{n^2}$
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+\textbf{(1)} Let $f(x) = \frac{4x}{x^4+1}$. $f(x)$ is continuous, positive, and decreasing for $x \ge 1$ (the denominator grows much faster than the numerator). We evaluate the corresponding improper integral:
+\[
+\int_1^\infty \frac{4x}{x^4+1} \,dx = \lim_{t \to \infty} \int_1^t \frac{4x}{(x^2)^2+1} \,dx
+\]
+Use substitution $u = x^2$, $du = 2x \,dx$. Thus $4x \,dx = 2 \,du$.
+When $x=1$, $u=1$. When $x=t$, $u=t^2$.
+\[
+\lim_{t \to \infty} \int_1^{t^2} \frac{2}{u^2+1} \,du = \lim_{t \to \infty} \left[ 2\arctan u \right]_1^{t^2} = \lim_{t \to \infty} \left( 2\arctan(t^2) - 2\arctan(1) \right)
+\]
+\[
+= 2\left(\frac{\pi}{2}\right) - 2\left(\frac{\pi}{4}\right) = \pi - \frac{\pi}{2} = \frac{\pi}{2}
+\]
+Since the improper integral converges to a finite value, by the \textbf{Integral Test}, the series $\sum \frac{4n}{n^4+1}$ \textbf{converges}.
+
+\textbf{(2)} Let $f(x) = x^2 e^{-x}$. This function is positive and continuous. Let's check where it is decreasing by finding its derivative:
+$f'(x) = 2xe^{-x} - x^2 e^{-x} = xe^{-x}(2-x)$. For $x \ge 2$, $f'(x) \le 0$, so it is decreasing. We can apply the Integral Test on $[2, \infty)$ (or $[1, \infty)$ since a finite number of initial terms do not affect convergence).
+We evaluate the integral using integration by parts. Let $u=x^2$, $dv=e^{-x}dx \implies du=2x dx, v=-e^{-x}$.
+\[
+\int x^2 e^{-x} \,dx = -x^2 e^{-x} - \int (-e^{-x})(2x) \,dx = -x^2 e^{-x} + 2 \int x e^{-x} \,dx
+\]
+Use integration by parts again for $\int x e^{-x} \,dx$. Let $u=x$, $dv=e^{-x}dx \implies du=dx, v=-e^{-x}$.
+\[
+\int x e^{-x} \,dx = -x e^{-x} - \int -e^{-x} \,dx = -x e^{-x} - e^{-x}
+\]
+Thus, the indefinite integral is:
+\[
+\int x^2 e^{-x} \,dx = -x^2 e^{-x} + 2(-x e^{-x} - e^{-x}) = -e^{-x}(x^2 + 2x + 2)
+\]
+Now we evaluate the improper integral:
+\[
+\int_1^\infty x^2 e^{-x} \,dx = \lim_{t \to \infty} \left[ \frac{-(x^2 + 2x + 2)}{e^x} \right]_1^t = \lim_{t \to \infty} \frac{-(t^2 + 2t + 2)}{e^t} - \frac{-5}{e}
+\]
+By L'Hôpital's Rule (applied twice), exponentials grow much faster than polynomials, so $\lim_{t \to \infty} \frac{-(t^2 + 2t + 2)}{e^t} = 0$.
+The integral evaluates to $\frac{5}{e}$. Since the integral converges, the series $\sum n^2 e^{-n}$ \textbf{converges} by the Integral Test.
+
+\textbf{(3)} Let $f(x) = \frac{\ln x}{x^2}$. It is continuous and positive for $x \ge 2$. Its derivative $f'(x) = \frac{\frac{1}{x}x^2 - 2x\ln x}{x^4} = \frac{x - 2x\ln x}{x^4} = \frac{1 - 2\ln x}{x^3}$. For $x \ge 2$, $2\ln x > 1$, so $f'(x) < 0$, meaning it is decreasing. We can apply the Integral Test.
+We evaluate the integral using integration by parts. Let $u=\ln x$, $dv=x^{-2}dx \implies du=\frac{1}{x}dx, v=-x^{-1}$.
+\[
+\int \frac{\ln x}{x^2} \,dx = -\frac{\ln x}{x} - \int \left(-\frac{1}{x}\right)\frac{1}{x} \,dx = -\frac{\ln x}{x} + \int x^{-2} \,dx = -\frac{\ln x}{x} - \frac{1}{x}
+\]
+Now we evaluate the improper integral:
+\[
+\int_1^\infty \frac{\ln x}{x^2} \,dx = \lim_{t \to \infty} \left[ -\frac{\ln x}{x} - \frac{1}{x} \right]_1^t = \lim_{t \to \infty} \left( -\frac{\ln t}{t} - \frac{1}{t} \right) - \left( -\frac{0}{1} - \frac{1}{1} \right)
+\]
+By L'Hôpital's Rule, $\lim_{t \to \infty} \frac{\ln t}{t} = \lim_{t \to \infty} \frac{1/t}{1} = 0$.
+Thus, the limit is $0 - 0 - (-1) = 1$.
+Since the integral converges, the series $\sum \frac{\ln n}{n^2}$ \textbf{converges} by the Integral Test.
+\end{solution}
+
+\subsection{Comparison Tests}
+
+\begin{exercise}
+Determine whether the following series converge or diverge.
+\begin{enumerate}
+    \item $\displaystyle \sum_{n=1}^{\infty} \frac{1}{n!}$
+    \item $\displaystyle \sum_{n=1}^{\infty} \frac{2n^2}{n^3+3n}$
+    \item $\displaystyle \sum_{n=1}^{\infty} \left(1-\cos \frac{\pi}{n}\right)$
+    \item $\displaystyle \sum_{n=1}^{\infty} \left(\sqrt{n^2+1}-\sqrt{n^2-1}\right)$
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+\textbf{(1)} We use the \textbf{Comparison Test}. Notice that for $n \ge 4$, $n!$ grows very rapidly.
+Specifically, $n! = n(n-1)(n-2) \cdots 2 \cdot 1$.
+For $n \ge 4$, $n! > n \cdot (n-1) \cdot 1 \cdots 1 > n^2$.
+Because $n! > n^2$, we have $\frac{1}{n!} < \frac{1}{n^2}$.
+We know that $\sum_{n=1}^{\infty} \frac{1}{n^2}$ is a convergent $p$-series ($p=2 > 1$).
+Since our terms $\frac{1}{n!}$ are smaller than the terms of a convergent series, $\sum \frac{1}{n!}$ \textbf{converges} by the Comparison Test.
+
+\textbf{(2)} We use the \textbf{Limit Comparison Test}. The dominant term in the numerator is $2n^2$, and in the denominator is $n^3$. So the terms behave like $\frac{2n^2}{n^3} = \frac{2}{n}$ for large $n$. Let $b_n = \frac{2}{n}$.
+\[
+\lim_{n \to \infty} \frac{a_n}{b_n} = \lim_{n \to \infty} \frac{\frac{2n^2}{n^3+3n}}{\frac{2}{n}} = \lim_{n \to \infty} \frac{2n^3}{2n^3+6n} = \lim_{n \to \infty} \frac{2}{2+\frac{6}{n^2}} = 1
+\]
+Since the limit is $1$ (a finite number greater than $0$), both series behave the same.
+We know that $\sum b_n = \sum \frac{2}{n} = 2\sum \frac{1}{n}$ is a harmonic series (or $p$-series with $p=1$), which is divergent.
+Therefore, by the Limit Comparison Test, the original series $\sum \frac{2n^2}{n^3+3n}$ \textbf{diverges}.
+
+\textbf{(3)} We use the \textbf{Limit Comparison Test}. For large $n$, $\frac{\pi}{n}$ is very small. We can use the Taylor expansion or equivalent infinitesimals: $\cos x \approx 1 - \frac{x^2}{2}$ for $x \approx 0$.
+Thus, $1 - \cos\frac{\pi}{n} \approx \frac{1}{2}\left(\frac{\pi}{n}\right)^2 = \frac{\pi^2}{2n^2}$.
+Let $b_n = \frac{1}{n^2}$. We compute the limit:
+\[
+\lim_{n \to \infty} \frac{a_n}{b_n} = \lim_{n \to \infty} \frac{1-\cos\frac{\pi}{n}}{1/n^2}
+\]
+Let $x = \frac{1}{n}$. As $n \to \infty$, $x \to 0^+$. The limit becomes:
+\[
+\lim_{x \to 0^+} \frac{1-\cos(\pi x)}{x^2}
+\]
+Applying L'Hôpital's Rule:
+\[
+\lim_{x \to 0^+} \frac{\pi\sin(\pi x)}{2x} = \lim_{x \to 0^+} \frac{\pi^2\cos(\pi x)}{2} = \frac{\pi^2}{2}
+\]
+Since the limit is $\frac{\pi^2}{2} > 0$, both series share the same convergence behavior.
+We know that $\sum b_n = \sum \frac{1}{n^2}$ converges ($p=2>1$).
+Therefore, by the Limit Comparison Test, $\sum \left(1-\cos \frac{\pi}{n}\right)$ \textbf{converges}.
+
+\textbf{(4)} First, we must rationalize the expression by multiplying the numerator and denominator by the conjugate:
+\begin{align*}
+a_n &= \sqrt{n^2+1}-\sqrt{n^2-1} \\
+&= \frac{(\sqrt{n^2+1}-\sqrt{n^2-1})(\sqrt{n^2+1}+\sqrt{n^2-1})}{\sqrt{n^2+1}+\sqrt{n^2-1}} \\
+&= \frac{(n^2+1) - (n^2-1)}{\sqrt{n^2+1}+\sqrt{n^2-1}} = \frac{2}{\sqrt{n^2+1}+\sqrt{n^2-1}}
+\end{align*}
+For large $n$, the denominator behaves like $\sqrt{n^2} + \sqrt{n^2} = 2n$. So $a_n$ behaves like $\frac{2}{2n} = \frac{1}{n}$.
+We use the \textbf{Limit Comparison Test} with $b_n = \frac{1}{n}$:
+\[
+\lim_{n \to \infty} \frac{a_n}{b_n} = \lim_{n \to \infty} \frac{\frac{2}{\sqrt{n^2+1}+\sqrt{n^2-1}}}{\frac{1}{n}} = \lim_{n \to \infty} \frac{2n}{\sqrt{n^2+1}+\sqrt{n^2-1}}
+\]
+Divide numerator and denominator by $n = \sqrt{n^2}$:
+\[
+\lim_{n \to \infty} \frac{2}{\sqrt{1+\frac{1}{n^2}} + \sqrt{1-\frac{1}{n^2}}} = \frac{2}{\sqrt{1+0} + \sqrt{1-0}} = \frac{2}{2} = 1
+\]
+Since the limit is $1 > 0$, both series behave the same.
+We know that $\sum b_n = \sum \frac{1}{n}$ is the divergent harmonic series.
+Therefore, by the Limit Comparison Test, the original series \textbf{diverges}.
+\end{solution}
+
+\end{document}
