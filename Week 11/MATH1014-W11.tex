@@ -1,0 +1,296 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{tikz}
+\usepackage{caption}
+\usetikzlibrary{arrows.meta,calc,patterns}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  urlcolor=blue,
+  citecolor=blue
+}
+
+\setlist[enumerate]{itemsep=0.25em,topsep=0.25em}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+
+\theoremstyle{definition}
+\newtheorem{exercise}{Exercise}[section]
+
+\newenvironment{solution}{\begin{proof}[Solution]}{\end{proof}}
+
+\DeclareMathOperator{\Area}{Area}
+\DeclareMathOperator{\Vol}{Vol}
+
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{18.1pt}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\IfFileExists{../Week 2/hkust-crest.png}{\includegraphics[height=14pt]{../Week 2/hkust-crest.png}}{}}
+\fancyhead[C]{MATH1014 Calculus II Tutorial}
+\fancyhead[R]{Week 11}
+\fancyfoot[C]{\thepage\ /\ \pageref{LastPage}}
+
+\title{\vspace{-1.0em}MATH1014 Calculus II Tutorial\\Week 11}
+\author{Wenkai Fan}
+\date{}
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+\section{Review}
+
+\subsection{Absolute and Conditional Convergence}
+Given any series $\sum a_n$, we can consider the corresponding series of absolute values $\sum |a_n|$.
+\begin{itemize}
+    \item \textbf{Absolute Convergence:} A series $\sum a_n$ is called \textit{absolutely convergent} if the series of absolute values $\sum |a_n|$ is convergent.
+    \item \textbf{Theorem:} If a series $\sum a_n$ is absolutely convergent, then it is convergent. (Absolute convergence implies convergence).
+    \item \textbf{Conditional Convergence:} A series $\sum a_n$ is called \textit{conditionally convergent} if it is convergent but not absolutely convergent. (That is, $\sum a_n$ converges, but $\sum |a_n|$ diverges).
+\end{itemize}
+
+\subsection{The Alternating Series Test (AST)}
+An alternating series is a series whose terms are alternately positive and negative, e.g., $\sum_{n=1}^\infty (-1)^{n-1} b_n$ or $\sum_{n=1}^\infty (-1)^n b_n$, where $b_n > 0$.
+If the alternating series $\sum_{n=1}^\infty (-1)^{n-1} b_n$ satisfies:
+\begin{enumerate}
+    \item $b_{n+1} \le b_n$ for all $n$ (the sequence $b_n$ is decreasing), and
+    \item $\lim_{n \to \infty} b_n = 0$,
+\end{enumerate}
+then the series is \textbf{convergent}.
+\textbf{Note:} To show that $b_n$ is decreasing, we can often consider the related function $f(x)$ where $f(n) = b_n$, and show that its derivative $f'(x) \le 0$ for large $x$.
+
+\subsection{The Ratio Test}
+The Ratio Test is particularly useful for series involving factorials (e.g., $n!$) or exponentials (e.g., $2^n$).
+Let $L = \lim_{n \to \infty} \left| \frac{a_{n+1}}{a_n} \right|$.
+\begin{itemize}
+    \item If $L < 1$, then the series $\sum a_n$ is \textbf{absolutely convergent} (and therefore convergent).
+    \item If $L > 1$ or $\lim_{n \to \infty} \left| \frac{a_{n+1}}{a_n} \right| = \infty$, then the series $\sum a_n$ is \textbf{divergent}.
+    \item If $L = 1$, the Ratio Test is \textbf{inconclusive}; no conclusion can be drawn. We must use another test.
+\end{itemize}
+
+\subsection{The Root Test}
+The Root Test is particularly useful when the entire $n$-th term is raised to the power of $n$.
+Let $L = \lim_{n \to \infty} \sqrt[n]{|a_n|} = \lim_{n \to \infty} |a_n|^{1/n}$.
+\begin{itemize}
+    \item If $L < 1$, then the series $\sum a_n$ is \textbf{absolutely convergent} (and therefore convergent).
+    \item If $L > 1$ or $\lim_{n \to \infty} \sqrt[n]{|a_n|} = \infty$, then the series $\sum a_n$ is \textbf{divergent}.
+    \item If $L = 1$, the Root Test is \textbf{inconclusive}; we must use another test.
+\end{itemize}
+
+\section{Exercises}
+
+\subsection{Alternating Series \& Absolute/Conditional Convergence}
+
+\begin{exercise}
+Check whether the following series are absolutely convergent, conditionally convergent or divergent.
+\begin{enumerate}
+    \item $\displaystyle \sum_{n=1}^{\infty} (-1)^{n+1}\sin\left(\frac{\pi}{2n}\right)$
+    \item $\displaystyle \sum_{n=1}^{\infty} (-1)^n\frac{\ln^2 n}{n}$
+    \item $\displaystyle \sum_{n=1}^{\infty} (-1)^{n+1}\frac{\ln(2+\frac{1}{n})}{\sqrt{(3n-2)(3n+2)}}$
+    \item $\displaystyle \sum_{n=1}^{\infty} \frac{1}{\sqrt{n}}\cos\left(\frac{n\pi}{3}\right)$
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+\textbf{(1)} Let $a_n = (-1)^{n+1}\sin\left(\frac{\pi}{2n}\right)$.
+First, we check for absolute convergence by considering the series $\sum |a_n| = \sum \sin\left(\frac{\pi}{2n}\right)$. Note that for $n \ge 1$, $0 < \frac{\pi}{2n} \le \frac{\pi}{2}$, so $\sin\left(\frac{\pi}{2n}\right) > 0$.
+We use the Limit Comparison Test with $b_n = \frac{\pi}{2n}$:
+\[
+\lim_{n \to \infty} \frac{|a_n|}{b_n} = \lim_{n \to \infty} \frac{\sin\left(\frac{\pi}{2n}\right)}{\frac{\pi}{2n}} = 1 > 0.
+\]
+Since $\sum b_n = \frac{\pi}{2} \sum \frac{1}{n}$ is a divergent harmonic series, $\sum |a_n|$ is \textbf{divergent} by the Limit Comparison Test. Thus, the series is not absolutely convergent.
+
+Now, we check for conditional convergence using the Alternating Series Test. Let $b_n = \sin\left(\frac{\pi}{2n}\right)$.
+\begin{itemize}
+    \item As $n$ increases, $\frac{\pi}{2n}$ decreases. Since $f(x) = \sin x$ is increasing on $(0, \frac{\pi}{2}]$, $b_n$ is a decreasing sequence. So $b_{n+1} \le b_n$.
+    \item $\lim_{n \to \infty} b_n = \lim_{n \to \infty} \sin\left(\frac{\pi}{2n}\right) = \sin(0) = 0$.
+\end{itemize}
+Since both conditions are met, the series $\sum a_n$ is convergent by the Alternating Series Test.
+\textbf{Conclusion:} The series is \textbf{conditionally convergent}.
+
+\textbf{(2)} Let $a_n = (-1)^n\frac{\ln^2 n}{n}$.
+First, check for absolute convergence: $\sum |a_n| = \sum \frac{\ln^2 n}{n}$.
+We compare it with the divergent harmonic series $\sum \frac{1}{n}$.
+\[
+\lim_{n \to \infty} \frac{\frac{\ln^2 n}{n}}{\frac{1}{n}} = \lim_{n \to \infty} \ln^2 n = \infty.
+\]
+Since $\frac{\ln^2 n}{n} \ge \frac{1}{n}$ for $n \ge 3$, by the Comparison Test, $\sum |a_n|$ is \textbf{divergent}. The series is not absolutely convergent.
+
+Next, we check for conditional convergence using the Alternating Series Test. Let $b_n = \frac{\ln^2 n}{n}$.
+\begin{itemize}
+    \item To show $b_n$ is decreasing, we consider $f(x) = \frac{\ln^2 x}{x}$ and find its derivative:
+    \[
+    f'(x) = \frac{2\ln x \cdot \frac{1}{x} \cdot x - \ln^2 x \cdot 1}{x^2} = \frac{2\ln x - \ln^2 x}{x^2} = \frac{\ln x (2 - \ln x)}{x^2}.
+    \]
+    For $x > e^2 \approx 7.389$, $\ln x > 2$, so $2 - \ln x < 0$. Thus $f'(x) < 0$. This implies that $b_n$ is decreasing for $n \ge 8$.
+    \item We check the limit: $\lim_{n \to \infty} \frac{\ln^2 n}{n}$. By L'H\^{o}pital's Rule (applied twice):
+    \[
+    \lim_{x \to \infty} \frac{\ln^2 x}{x} = \lim_{x \to \infty} \frac{2\ln x \cdot \frac{1}{x}}{1} = \lim_{x \to \infty} \frac{2\ln x}{x} = \lim_{x \to \infty} \frac{2/x}{1} = 0.
+    \]
+\end{itemize}
+Since $b_n$ is eventually decreasing and its limit is 0, the series converges by the AST.
+\textbf{Conclusion:} The series is \textbf{conditionally convergent}.
+
+\textbf{(3)} Let $a_n = (-1)^{n+1}\frac{\ln(2+\frac{1}{n})}{\sqrt{(3n-2)(3n+2)}}$.
+First, check for absolute convergence: $\sum |a_n| = \sum \frac{\ln(2+\frac{1}{n})}{\sqrt{9n^2-4}}$.
+For large $n$, $\ln(2+\frac{1}{n}) \approx \ln 2$, and $\sqrt{9n^2-4} \approx 3n$. So we use the Limit Comparison Test with $b_n = \frac{1}{n}$:
+\[
+\lim_{n \to \infty} \frac{|a_n|}{b_n} = \lim_{n \to \infty} \frac{n\ln(2+\frac{1}{n})}{\sqrt{9n^2-4}} = \lim_{n \to \infty} \frac{\ln(2+\frac{1}{n})}{\sqrt{9-\frac{4}{n^2}}} = \frac{\ln 2}{3} > 0.
+\]
+Since $\sum \frac{1}{n}$ is divergent, $\sum |a_n|$ is \textbf{divergent}. The series is not absolutely convergent.
+
+Now, use the Alternating Series Test. Let $b_n = \frac{\ln(2+\frac{1}{n})}{\sqrt{(3n-2)(3n+2)}}$.
+\begin{itemize}
+    \item As $n$ increases, $2+\frac{1}{n}$ decreases, so the numerator $\ln(2+\frac{1}{n})$ is positive and decreasing.
+    \item As $n$ increases, the denominator $\sqrt{9n^2-4}$ is positive and increasing.
+    \item A decreasing positive numerator divided by an increasing positive denominator results in a decreasing sequence. Thus $b_{n+1} \le b_n$.
+    \item $\lim_{n \to \infty} b_n = \lim_{n \to \infty} \frac{\ln(2+\frac{1}{n})}{\sqrt{9n^2-4}} = \frac{\ln 2}{\infty} = 0$.
+\end{itemize}
+By the AST, the series converges.
+\textbf{Conclusion:} The series is \textbf{conditionally convergent}.
+
+\textbf{(4)} Let $a_n = \frac{1}{\sqrt{n}}\cos\left(\frac{n\pi}{3}\right)$.
+This is an alternating-like series. Let's list the values of $\cos\left(\frac{n\pi}{3}\right)$ for $n = 1, 2, 3, 4, 5, 6$:
+\[
+\frac{1}{2}, \quad -\frac{1}{2}, \quad -1, \quad -\frac{1}{2}, \quad \frac{1}{2}, \quad 1.
+\]
+The sequence has a period of 6. Notice that the absolute value of $a_n$ is $|a_n| = \frac{1}{\sqrt{n}}\left|\cos\left(\frac{n\pi}{3}\right)\right|$. Since $\left|\cos\left(\frac{n\pi}{3}\right)\right| \ge \frac{1}{2}$ for all $n$, we have $|a_n| \ge \frac{1}{2\sqrt{n}}$.
+Since $\sum \frac{1}{2\sqrt{n}}$ is a divergent $p$-series ($p = \frac{1}{2} < 1$), by the Comparison Test, $\sum |a_n|$ is \textbf{divergent}.
+
+To check for conditional convergence, we group the terms according to the value of the cosine. Because the sequence of cosines has period 6 and sums to 0 over a period, we can split the series into three strictly alternating series:
+\begin{align*}
+\sum_{n=1}^{\infty} a_n &= \sum_{k=1}^{\infty} a_{3k-2} + \sum_{k=1}^{\infty} a_{3k-1} + \sum_{k=1}^{\infty} a_{3k} \\
+&= \sum_{k=1}^{\infty} \frac{(-1)^{k-1}}{2\sqrt{3k-2}} + \sum_{k=1}^{\infty} \frac{(-1)^{k-1}}{2\sqrt{3k-1}} + \sum_{k=1}^{\infty} \frac{(-1)^{k}}{\sqrt{3k}}.
+\end{align*}
+Each of these three series satisfies the conditions of the Alternating Series Test: their absolute terms are decreasing and limit to 0. Thus, all three sub-series are convergent. The sum of convergent series is convergent.
+\textbf{Conclusion:} The series is \textbf{conditionally convergent}.
+\end{solution}
+
+\subsection{The Ratio Test}
+
+\begin{exercise}
+Check whether the following series are absolutely convergent, conditionally convergent or divergent.
+\begin{enumerate}
+    \item $\displaystyle \sum_{n=1}^{\infty} n^2 2^{-n}$
+    \item $\displaystyle \sum_{n=1}^{\infty} \frac{2^n \cdot n!}{n^n}$
+    \item $\displaystyle \sum_{n=1}^{\infty} \frac{a^n}{(1+a)(1+a^2)\cdots(1+a^n)} \quad (a > 0)$
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+\textbf{(1)} Let $a_n = n^2 2^{-n} = \frac{n^2}{2^n}$. We apply the Ratio Test:
+\[
+L = \lim_{n \to \infty} \left| \frac{a_{n+1}}{a_n} \right| = \lim_{n \to \infty} \frac{(n+1)^2}{2^{n+1}} \cdot \frac{2^n}{n^2} = \lim_{n \to \infty} \left(\frac{n+1}{n}\right)^2 \cdot \frac{2^n}{2^{n+1}}.
+\]
+Simplifying the expression:
+\[
+L = \lim_{n \to \infty} \left(1+\frac{1}{n}\right)^2 \cdot \frac{1}{2} = (1)^2 \cdot \frac{1}{2} = \frac{1}{2}.
+\]
+Since $L = \frac{1}{2} < 1$, by the Ratio Test, the series is \textbf{absolutely convergent}.
+
+\textbf{(2)} Let $a_n = \frac{2^n \cdot n!}{n^n}$. We apply the Ratio Test:
+\begin{align*}
+L = \lim_{n \to \infty} \left| \frac{a_{n+1}}{a_n} \right| &= \lim_{n \to \infty} \frac{2^{n+1} \cdot (n+1)!}{(n+1)^{n+1}} \cdot \frac{n^n}{2^n \cdot n!} \\
+&= \lim_{n \to \infty} \left( \frac{2^{n+1}}{2^n} \right) \cdot \left( \frac{(n+1)!}{n!} \right) \cdot \left( \frac{n^n}{(n+1)^{n+1}} \right) \\
+&= \lim_{n \to \infty} 2 \cdot (n+1) \cdot \frac{n^n}{(n+1)^n (n+1)} \\
+&= \lim_{n \to \infty} 2 \cdot \left(\frac{n}{n+1}\right)^n = \lim_{n \to \infty} \frac{2}{\left(\frac{n+1}{n}\right)^n} \\
+&= \lim_{n \to \infty} \frac{2}{\left(1+\frac{1}{n}\right)^n}.
+\end{align*}
+Recall the standard limit $\lim_{n \to \infty} \left(1+\frac{1}{n}\right)^n = e$. Therefore,
+\[
+L = \frac{2}{e}.
+\]
+Since $e \approx 2.718$, we have $L = \frac{2}{e} < 1$. By the Ratio Test, the series is \textbf{absolutely convergent}.
+
+\textbf{(3)} Let $a_n = \frac{a^n}{(1+a)(1+a^2)\cdots(1+a^n)}$. We apply the Ratio Test:
+\[
+L = \lim_{n \to \infty} \left| \frac{a_{n+1}}{a_n} \right| = \lim_{n \to \infty} \frac{a^{n+1}}{(1+a)\cdots(1+a^n)(1+a^{n+1})} \cdot \frac{(1+a)\cdots(1+a^n)}{a^n}.
+\]
+Most terms cancel out, leaving:
+\[
+L = \lim_{n \to \infty} \frac{a}{1+a^{n+1}}.
+\]
+We must discuss this limit based on the value of $a > 0$:
+\begin{itemize}
+    \item \textbf{If $0 < a < 1$:} Then $a^{n+1} \to 0$ as $n \to \infty$. Thus, $L = \frac{a}{1+0} = a < 1$.
+    \item \textbf{If $a = 1$:} Then $a^{n+1} = 1$ for all $n$. Thus, $L = \frac{1}{1+1} = \frac{1}{2} < 1$.
+    \item \textbf{If $a > 1$:} Then $a^{n+1} \to \infty$ as $n \to \infty$. Thus, $L = \frac{a}{\infty} = 0 < 1$.
+\end{itemize}
+In all cases, $L < 1$. By the Ratio Test, the series is \textbf{absolutely convergent} for all $a > 0$.
+\end{solution}
+
+\subsection{The Root Test \& Parameter Discussion}
+
+\begin{exercise}
+Check whether the following series are absolutely convergent, conditionally convergent or divergent.
+\begin{enumerate}
+    \item $\displaystyle \sum_{n=1}^{\infty} (-1)^{n+1}\frac{n^2 x^n}{2^n}$
+    \item $\displaystyle \sum_{n=1}^{\infty} (-1)^{n+1}\frac{4^n \sin^{2n}x}{n}$
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+\textbf{(1)} Let $a_n = (-1)^{n+1}\frac{n^2 x^n}{2^n}$. Because of the $n$-th powers, we use the \textbf{Root Test}:
+\[
+L = \lim_{n \to \infty} \sqrt[n]{|a_n|} = \lim_{n \to \infty} \sqrt[n]{\left| \frac{n^2 x^n}{2^n} \right|} = \lim_{n \to \infty} \frac{\sqrt[n]{n^2} |x|}{2} = \lim_{n \to \infty} \frac{(\sqrt[n]{n})^2 |x|}{2}.
+\]
+Since $\lim_{n \to \infty} \sqrt[n]{n} = 1$, we have:
+\[
+L = \frac{1^2 \cdot |x|}{2} = \frac{|x|}{2}.
+\]
+By the Root Test:
+\begin{itemize}
+    \item If $L = \frac{|x|}{2} < 1 \implies |x| < 2$, the series is \textbf{absolutely convergent}.
+    \item If $L = \frac{|x|}{2} > 1 \implies |x| > 2$, the series is \textbf{divergent}.
+    \item If $L = 1 \implies |x| = 2$, the Root Test is inconclusive. We must check the endpoints $x = 2$ and $x = -2$ manually.
+\end{itemize}
+\textbf{Checking boundaries:} \\
+When $x = 2$: $a_n = (-1)^{n+1}\frac{n^2 2^n}{2^n} = (-1)^{n+1}n^2$. As $n \to \infty$, $\lim a_n$ does not exist. By the Test for Divergence, the series diverges. \\
+When $x = -2$: $a_n = (-1)^{n+1}\frac{n^2 (-2)^n}{2^n} = (-1)^{n+1} n^2 (-1)^n = (-1)^{2n+1} n^2 = -n^2$. As $n \to \infty$, $\lim a_n = -\infty \neq 0$. The series diverges.
+
+\textbf{Conclusion:} The series is \textbf{absolutely convergent} for $|x| < 2$, and \textbf{divergent} for $|x| \ge 2$.
+
+\textbf{(2)} Let $a_n = (-1)^{n+1}\frac{4^n \sin^{2n}x}{n}$. We use the \textbf{Root Test}:
+\[
+L = \lim_{n \to \infty} \sqrt[n]{|a_n|} = \lim_{n \to \infty} \sqrt[n]{\frac{4^n |\sin x|^{2n}}{n}} = \lim_{n \to \infty} \frac{4 |\sin x|^2}{\sqrt[n]{n}}.
+\]
+Since $\lim_{n \to \infty} \sqrt[n]{n} = 1$, we have:
+\[
+L = 4\sin^2 x.
+\]
+By the Root Test:
+\begin{itemize}
+    \item If $4\sin^2 x < 1 \implies \sin^2 x < \frac{1}{4} \implies |\sin x| < \frac{1}{2}$.
+    This occurs when $x \in \left(k\pi - \frac{\pi}{6}, k\pi + \frac{\pi}{6}\right)$ for any integer $k$. In these intervals, the series is \textbf{absolutely convergent}.
+    \item If $4\sin^2 x > 1 \implies |\sin x| > \frac{1}{2}$.
+    This occurs when $x \in \left(k\pi + \frac{\pi}{6}, k\pi + \frac{5\pi}{6}\right)$ for any integer $k$. In these intervals, the series is \textbf{divergent}.
+    \item If $4\sin^2 x = 1 \implies |\sin x| = \frac{1}{2}$.
+    This occurs at the boundary points $x = k\pi \pm \frac{\pi}{6}$. The Root Test is inconclusive, so we check these points manually.
+\end{itemize}
+\textbf{Checking boundaries:} \\
+When $|\sin x| = \frac{1}{2}$, we have $\sin^2 x = \frac{1}{4}$. Substituting this back into the original series gives:
+\[
+a_n = (-1)^{n+1} \frac{4^n \left(\frac{1}{4}\right)^n}{n} = \frac{(-1)^{n+1}}{n}.
+\]
+The series becomes $\sum_{n=1}^{\infty} \frac{(-1)^{n+1}}{n}$, which is the alternating harmonic series.
+We know that the alternating harmonic series converges (by the Alternating Series Test) but does not converge absolutely (the harmonic series $\sum \frac{1}{n}$ diverges). Thus, it is conditionally convergent.
+
+\textbf{Conclusion:} 
+The series is \textbf{absolutely convergent} when $x \in \left(k\pi - \frac{\pi}{6}, k\pi + \frac{\pi}{6}\right)$. \\
+It is \textbf{conditionally convergent} when $x = k\pi \pm \frac{\pi}{6}$. \\
+It is \textbf{divergent} when $x \in \left(k\pi + \frac{\pi}{6}, k\pi + \frac{5\pi}{6}\right)$.
+\end{solution}
+
+\end{document}
