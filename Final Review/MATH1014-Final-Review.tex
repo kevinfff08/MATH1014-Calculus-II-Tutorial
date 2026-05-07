@@ -1,0 +1,507 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{tikz}
+\usepackage{caption}
+\usetikzlibrary{arrows.meta,calc,patterns}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  urlcolor=blue,
+  citecolor=blue
+}
+
+\setlist[enumerate]{itemsep=0.25em,topsep=0.25em}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+
+\DeclareMathOperator{\Area}{Area}
+\DeclareMathOperator{\Vol}{Vol}
+\DeclareMathOperator{\Proj}{Proj}
+
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{18.1pt}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\IfFileExists{../Week 2/hkust-crest.png}{\includegraphics[height=14pt]{../Week 2/hkust-crest.png}}{}}
+\fancyhead[C]{MATH1014 Calculus II Tutorial}
+\fancyhead[R]{Final Review}
+\fancyfoot[C]{\thepage\ /\ \pageref{LastPage}}
+
+\title{\vspace{-1.0em}MATH1014 Calculus II Tutorial\\Final Review}
+\author{Wenkai Fan}
+\date{}
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+\section{A. Integration Applications}
+
+\subsection{Fundamental Theorem of Calculus}
+\begin{enumerate}
+  \item If $F'(x)=f(x)$ on an interval, then
+  \[
+  \int_a^b f(t)\,dt=F(b)-F(a).
+  \]
+  \item If $A(x)=\int_a^x f(t)\,dt$ and $f$ is continuous, then
+  \[
+  A'(x)=f(x).
+  \]
+  \item When you see an accumulated-area function, differentiate it. When you see a definite integral, look for an antiderivative.
+\end{enumerate}
+
+\subsection{Area Between Curves}
+\begin{enumerate}
+  \item Using vertical slices:
+  \[
+  \Area=\int_a^b \bigl(y_{\text{top}}-y_{\text{bottom}}\bigr)\,dx.
+  \]
+  \item Using horizontal slices:
+  \[
+  \Area=\int_c^d \bigl(x_{\text{right}}-x_{\text{left}}\bigr)\,dy.
+  \]
+  \item Always choose the variable that makes the region description simplest.
+  \item If top/bottom or right/left changes, split the interval at intersection points.
+\end{enumerate}
+
+\subsection{Volumes}
+\begin{enumerate}
+  \item Cross-sectional area method:
+  \[
+  \Vol=\int_a^b A(x)\,dx.
+  \]
+  \item Disk/washer method: slices are perpendicular to the axis of rotation.
+  \[
+  \Vol=\int_a^b \pi\bigl(R(x)^2-r(x)^2\bigr)\,dx
+  \]
+  or the analogous $dy$ version.
+  \item Cylindrical shells: slices are parallel to the axis of rotation.
+  \[
+  \Vol=\int 2\pi(\text{radius})(\text{height}).
+  \]
+  \item Standard decision rule: first choose slice direction, then write radius and height from the geometry.
+\end{enumerate}
+
+\subsection{Arc Length}
+\begin{enumerate}
+  \item If $y=y(x)$ on $[a,b]$, then
+  \[
+  L=\int_a^b \sqrt{1+\left(\frac{dy}{dx}\right)^2}\,dx.
+  \]
+  \item If $x=x(y)$ on $[c,d]$, then
+  \[
+  L=\int_c^d \sqrt{1+\left(\frac{dx}{dy}\right)^2}\,dy.
+  \]
+  \item Before integrating, simplify the expression under the square root using identities or perfect-square structure.
+\end{enumerate}
+
+\subsection{Area of Surface Revolution}
+\begin{enumerate}
+  \item Rotating $y=f(x)\ge 0$ about the $x$-axis:
+  \[
+  \Area=2\pi\int_a^b y\,ds,\qquad ds=\sqrt{1+\left(\frac{dy}{dx}\right)^2}\,dx.
+  \]
+  \item Rotating $x=g(y)\ge 0$ about the $y$-axis:
+  \[
+  \Area=2\pi\int_c^d x\,ds,\qquad ds=\sqrt{1+\left(\frac{dx}{dy}\right)^2}\,dy.
+  \]
+  \item The safe workflow is: write $ds$, simplify, then choose a substitution if needed.
+\end{enumerate}
+
+\subsection{Work}
+\begin{enumerate}
+  \item Core template:
+  \[
+  W=\int (\text{force})\cdot(\text{distance}).
+  \]
+  \item For fluids or lifting problems:
+  \[
+  W=\int (\text{weight of slice})\cdot(\text{lifting distance}).
+  \]
+  \item For fluids, weight is usually $\rho g \cdot (\text{volume of slice})$.
+  \item A reliable setup is: choose a coordinate, describe one slice, find its volume/weight, then multiply by travel distance.
+\end{enumerate}
+
+\section{B. Integration Techniques}
+
+\subsection{Integration by Parts}
+\begin{enumerate}
+  \item Formula:
+  \[
+  \int u\,dv=uv-\int v\,du.
+  \]
+  \item Choose $u$ so that differentiating it makes it simpler.
+  \item Typical good choices for $u$ include $\ln x$, inverse trig functions, and powers of $\ln x$.
+  \item If integration by parts reproduces the original integral, move that term to the left and solve for the integral algebraically.
+\end{enumerate}
+
+\subsection{Trigonometric Integrals}
+\begin{enumerate}
+  \item Use derivative relationships such as
+  \[
+  \frac{d}{dx}(\sin x)=\cos x,\qquad \frac{d}{dx}(\cos x)=-\sin x.
+  \]
+  \item Rewrite the integrand to create a useful $du$ whenever possible.
+  \item Common identities:
+  \[
+  \sin^2 x+\cos^2 x=1,\qquad
+  \cos(\alpha-\beta)=\cos\alpha\cos\beta+\sin\alpha\sin\beta.
+  \]
+  \item Useful rewrites include
+  \[
+  \sin x+\cos x=\sqrt{2}\sin\left(x+\frac{\pi}{4}\right),\qquad
+  1+\cos t=2\cos^2\frac{t}{2}.
+  \]
+\end{enumerate}
+
+\subsection{Trigonometric Substitution}
+\begin{enumerate}
+  \item For $\sqrt{1-x^2}$, use
+  \[
+  x=\sin t,\qquad dx=\cos t\,dt,\qquad \sqrt{1-x^2}=\cos t.
+  \]
+  \item For $\sqrt{1+x^2}$, use
+  \[
+  x=\tan t,\qquad dx=\sec^2 t\,dt,\qquad \sqrt{1+x^2}=\sec t.
+  \]
+  \item After substitution, simplify completely in trig form before integrating.
+  \item Convert the final answer back to the original variable.
+\end{enumerate}
+
+\subsection{Tangent Half-Angle Substitution}
+\begin{enumerate}
+  \item Let
+  \[
+  u=\tan\frac{x}{2}.
+  \]
+  \item Then
+  \[
+  \sin x=\frac{2u}{1+u^2},\qquad
+  \cos x=\frac{1-u^2}{1+u^2},\qquad
+  dx=\frac{2}{1+u^2}\,du.
+  \]
+  \item This substitution turns many rational expressions in $\sin x$ and $\cos x$ into rational functions of $u$.
+\end{enumerate}
+
+\subsection{Partial Fraction Decomposition}
+\begin{enumerate}
+  \item Factor the denominator first.
+  \item For linear factors, split into constants over each factor.
+  \item For irreducible quadratic factors, use a linear numerator.
+  \item Completing the square in a quadratic often leads to logarithm or $\arctan$ terms.
+\end{enumerate}
+
+\section{C. Extended Topics on Integration}
+
+\subsection{Numerical Integration}
+\begin{enumerate}
+  \item Let $\Delta x=\frac{b-a}{n}$ and $x_i=a+i\Delta x$.
+  \item Left endpoint rule:
+  \[
+  L_n=\Delta x\,[f(x_0)+f(x_1)+\cdots+f(x_{n-1})].
+  \]
+  \item Right endpoint rule:
+  \[
+  R_n=\Delta x\,[f(x_1)+f(x_2)+\cdots+f(x_n)].
+  \]
+  \item Trapezoidal rule:
+  \[
+  T_n=\frac{\Delta x}{2}[f(x_0)+2f(x_1)+\cdots+2f(x_{n-1})+f(x_n)].
+  \]
+  \item Simpson's rule (requires even $n$):
+  \[
+  S_n=\frac{\Delta x}{3}[f(x_0)+4f(x_1)+2f(x_2)+\cdots+4f(x_{n-1})+f(x_n)].
+  \]
+\end{enumerate}
+
+\subsection{Polar Coordinates}
+\begin{enumerate}
+  \item Conversion formulas:
+  \[
+  x=r\cos\theta,\qquad y=r\sin\theta,\qquad r^2=x^2+y^2.
+  \]
+  \item Area enclosed by a polar curve:
+  \[
+  A=\int_\alpha^\beta \frac12 r^2\,d\theta.
+  \]
+  \item Arc length of a polar curve:
+  \[
+  L=\int_\alpha^\beta \sqrt{r^2+\left(\frac{dr}{d\theta}\right)^2}\,d\theta.
+  \]
+  \item Always choose bounds that trace the curve exactly once, and use symmetry when it reduces work.
+\end{enumerate}
+
+\subsection{Improper Integrals}
+\begin{enumerate}
+  \item Type 1 improper integrals have infinite intervals:
+  \[
+  \int_a^\infty f(x)\,dx=\lim_{t\to\infty}\int_a^t f(x)\,dx.
+  \]
+  \item Type 2 improper integrals have an infinite discontinuity:
+  \[
+  \int_a^b f(x)\,dx=\lim_{t\to b^-}\int_a^t f(x)\,dx
+  \]
+  or the analogous one-sided limit.
+  \item Split the integral at any interior singular point.
+  \item The improper integral converges only if the corresponding limit exists and is finite.
+\end{enumerate}
+
+\subsection{Comparison for Improper Integrals}
+\begin{enumerate}
+  \item If $0\le f(x)\le g(x)$ and $\int g$ converges, then $\int f$ also converges.
+  \item If $0\le f(x)\le g(x)$ and $\int f$ diverges, then $\int g$ also diverges.
+  \item Reference $p$-integrals:
+  \[
+  \int_1^\infty \frac{1}{x^p}\,dx
+  \begin{cases}
+  \text{converges}, & p>1,\\
+  \text{diverges}, & p\le 1,
+  \end{cases}
+  \]
+  \[
+  \int_0^1 \frac{1}{x^p}\,dx
+  \begin{cases}
+  \text{converges}, & p<1,\\
+  \text{diverges}, & p\ge 1.
+  \end{cases}
+  \]
+  \item A standard workflow is: identify where the problem occurs, compare with a simple $p$-type model, then conclude convergence or divergence.
+\end{enumerate}
+
+\section{D. Sequences and Series}
+
+\subsection{Infinite Sequences}
+\begin{itemize}
+  \item A sequence converges if its terms approach a finite limit.
+  \item \textbf{Squeeze Theorem:} if $a_n\le b_n\le c_n$ eventually and $a_n,c_n\to L$, then $b_n\to L$.
+  \item \textbf{Monotone Convergence Theorem:} every bounded monotone sequence converges.
+  \item For recursively defined sequences, first guess the limit, then prove monotonicity and boundedness.
+\end{itemize}
+
+\subsection{Infinite Series and the Divergence Test}
+\begin{itemize}
+  \item A series $\sum a_n$ converges if its partial sums converge.
+  \item Necessary condition:
+  \[
+  \sum a_n \text{ convergent} \implies a_n\to 0.
+  \]
+  \item Therefore, if $\lim_{n\to\infty} a_n\neq 0$ or does not exist, then $\sum a_n$ diverges.
+  \item If $a_n\to 0$, this test is inconclusive.
+\end{itemize}
+
+\subsection{Telescoping Series}
+\begin{itemize}
+  \item Write the general term so cancellation becomes visible.
+  \item Compute the partial sum $S_n$ explicitly.
+  \item Then evaluate $\lim_{n\to\infty} S_n$.
+\end{itemize}
+
+\subsection{Integral Test}
+\begin{itemize}
+  \item If $a_n=f(n)$ where $f$ is continuous, positive, and decreasing on $[1,\infty)$, then
+  \[
+  \sum_{n=1}^\infty a_n
+  \]
+  and
+  \[
+  \int_1^\infty f(x)\,dx
+  \]
+  either both converge or both diverge.
+  \item This test is especially useful for logarithms and power-type expressions.
+\end{itemize}
+
+\subsection{Comparison Tests for Series}
+\begin{itemize}
+  \item \textbf{Comparison Test:} for positive-term series, compare directly with a simpler benchmark.
+  \item \textbf{Limit Comparison Test:} if
+  \[
+  \lim_{n\to\infty}\frac{a_n}{b_n}=c,\qquad 0<c<\infty,
+  \]
+  then $\sum a_n$ and $\sum b_n$ have the same behavior.
+  \item Common benchmark series:
+  \[
+  \sum \frac{1}{n^p},\qquad \sum \frac{1}{ar^n},\qquad \sum \frac{1}{n(\ln n)^p}.
+  \]
+\end{itemize}
+
+\subsection{Absolute and Conditional Convergence}
+\begin{itemize}
+  \item A series $\sum a_n$ is absolutely convergent if $\sum |a_n|$ converges.
+  \item Absolute convergence implies convergence.
+  \item A series is conditionally convergent if $\sum a_n$ converges but $\sum |a_n|$ diverges.
+\end{itemize}
+
+\subsection{Alternating Series Test}
+\begin{itemize}
+  \item For
+  \[
+  \sum_{n=1}^\infty (-1)^{n-1}b_n,\qquad b_n>0,
+  \]
+  the series converges if:
+  \begin{enumerate}
+    \item $b_n$ is decreasing eventually;
+    \item $b_n\to 0$.
+  \end{enumerate}
+  \item To show $b_n$ is decreasing, it is often helpful to study a continuous function $f(x)$ with $f(n)=b_n$.
+\end{itemize}
+
+\subsection{Ratio Test}
+\begin{itemize}
+  \item Let
+  \[
+  L=\lim_{n\to\infty}\left|\frac{a_{n+1}}{a_n}\right|.
+  \]
+  \item If $L<1$, the series converges absolutely.
+  \item If $L>1$ or $L=\infty$, the series diverges.
+  \item If $L=1$, the test is inconclusive.
+  \item This test is especially useful for factorials and exponentials.
+\end{itemize}
+
+\subsection{Root Test}
+\begin{itemize}
+  \item Let
+  \[
+  L=\lim_{n\to\infty}\sqrt[n]{|a_n|}.
+  \]
+  \item If $L<1$, the series converges absolutely.
+  \item If $L>1$ or $L=\infty$, the series diverges.
+  \item If $L=1$, the test is inconclusive.
+  \item This test is especially useful when the $n$th term already contains an $n$th power.
+\end{itemize}
+
+\subsection{How to Choose a Series Test}
+\begin{itemize}
+  \item Use the divergence test first.
+  \item For positive terms with logarithms or integrals that resemble functions of a real variable, try the integral test.
+  \item For positive terms that look like a known benchmark, try comparison or limit comparison.
+  \item For alternating signs, try the alternating series test and then check absolute convergence separately.
+  \item For factorials or exponentials, try the ratio test.
+  \item For $n$th powers, try the root test.
+\end{itemize}
+
+\section{E. Power Series and Taylor Expansions}
+
+\subsection{Power Series}
+\begin{itemize}
+  \item A power series centered at $a$ has the form
+  \[
+  \sum_{n=0}^\infty c_n(x-a)^n.
+  \]
+  \item There is a radius of convergence $R$ such that the series converges for $|x-a|<R$.
+  \item Inside its interval of convergence, a power series behaves like a polynomial.
+\end{itemize}
+
+\subsection{Radius and Interval of Convergence}
+\begin{itemize}
+  \item Use the ratio test or root test to find $R$.
+  \item After finding the open interval $|x-a|<R$, check both endpoints separately.
+  \item Endpoint behavior may differ, so the final interval can be open, closed, or half-open.
+\end{itemize}
+
+\subsection{Taylor and Maclaurin Series}
+\begin{itemize}
+  \item Taylor series centered at $a$:
+  \[
+  f(x)=\sum_{n=0}^\infty \frac{f^{(n)}(a)}{n!}(x-a)^n.
+  \]
+  \item Maclaurin series is the special case $a=0$.
+  \item Important standard series:
+  \[
+  \frac{1}{1-x}=\sum_{n=0}^\infty x^n,\qquad |x|<1,
+  \]
+  \[
+  e^x=\sum_{n=0}^\infty \frac{x^n}{n!},
+  \]
+  \[
+  \ln(1+x)=\sum_{n=1}^\infty (-1)^{n-1}\frac{x^n}{n},\qquad -1<x\le 1.
+  \]
+\end{itemize}
+
+\subsection{Operations on Power Series}
+\begin{itemize}
+  \item Substitution: replace $x$ by a simpler expression such as $2x$ or $-x^2$.
+  \item Term-by-term differentiation:
+  \[
+  \frac{d}{dx}\left[\sum c_n(x-a)^n\right]=\sum n c_n(x-a)^{n-1}.
+  \]
+  \item Term-by-term integration:
+  \[
+  \int \left[\sum c_n(x-a)^n\right]dx=C+\sum c_n\frac{(x-a)^{n+1}}{n+1}.
+  \]
+  \item The radius of convergence stays the same after differentiation or integration, but endpoints must be checked again.
+\end{itemize}
+
+\section{F. Vectors and 3D Geometry}
+
+\subsection{Vectors: Magnitude and Unit Vectors}
+\begin{itemize}
+  \item For $\vec{v}=\langle v_1,v_2,v_3\rangle$,
+  \[
+  |\vec{v}|=\sqrt{v_1^2+v_2^2+v_3^2}.
+  \]
+  \item A unit vector in the same direction is
+  \[
+  \frac{\vec{v}}{|\vec{v}|}.
+  \]
+\end{itemize}
+
+\subsection{Dot Product and Angle Between Vectors}
+\begin{itemize}
+  \item Algebraic definition:
+  \[
+  \vec{a}\cdot\vec{b}=a_1b_1+a_2b_2+a_3b_3.
+  \]
+  \item Geometric definition:
+  \[
+  \vec{a}\cdot\vec{b}=|\vec{a}|\,|\vec{b}|\cos\theta.
+  \]
+  \item Hence
+  \[
+  \cos\theta=\frac{\vec{a}\cdot\vec{b}}{|\vec{a}|\,|\vec{b}|}.
+  \]
+\end{itemize}
+
+\subsection{Cross Product and Orthogonality}
+\begin{itemize}
+  \item The cross product $\vec{a}\times\vec{b}$ is perpendicular to both $\vec{a}$ and $\vec{b}$.
+  \item Compute it with the determinant formula:
+  \[
+  \vec{a}\times\vec{b}=
+  \begin{vmatrix}
+  \mathbf{i} & \mathbf{j} & \mathbf{k}\\
+  a_1 & a_2 & a_3\\
+  b_1 & b_2 & b_3
+  \end{vmatrix}.
+  \]
+  \item It is a standard way to find a normal vector to a plane generated by two vectors.
+\end{itemize}
+
+\subsection{Projection and Distance to a Plane}
+\begin{itemize}
+  \item Projection of $\vec{b}$ onto $\vec{a}$:
+  \[
+  \Proj_{\vec{a}}\vec{b}=\left(\frac{\vec{a}\cdot\vec{b}}{|\vec{a}|^2}\right)\vec{a}.
+  \]
+  \item If a plane through the origin is generated by $\vec{a}$ and $\vec{b}$, then a normal vector is
+  \[
+  \vec{n}=\vec{a}\times\vec{b}.
+  \]
+  \item The distance from a point with position vector $\vec{r}$ to this plane is
+  \[
+  d=\frac{|\vec{r}\cdot\vec{n}|}{|\vec{n}|}.
+  \]
+\end{itemize}
+
+\end{document}
